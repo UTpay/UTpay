@@ -51,7 +51,7 @@ class SignUpView(View):
 
     def make_random_password(self, length):
         alphabet = string.ascii_letters + string.digits
-        password = ''.join(secrets.choice(alphabet) for i in range(length))
+        password = ''.join(secrets.choice(alphabet) for _ in range(length))
         return password
 
 @method_decorator(login_required, name='dispatch')
