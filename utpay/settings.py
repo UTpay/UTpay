@@ -122,6 +122,17 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
+# Contract settings
+
+# Mainnet
+# ARTIFACT_PATH = 'static/contracts/mainnet/UTCoin.json'
+# UTCOIN_ADDRESS = ''
+
+# Ropsten
+ARTIFACT_PATH = 'static/contracts/ropsten/UTCoin.json'
+UTCOIN_ADDRESS = '0x9bab3c293ca109de331069addced28380c5cc6fc'
+
+
 # Load all local settings
 try:
     from .local_settings import *
