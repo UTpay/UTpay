@@ -1,4 +1,6 @@
 from django.contrib.auth import login, authenticate
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from django.shortcuts import render, redirect
 from django.views import View
 
@@ -32,6 +34,7 @@ class SignUpView(View):
             }
             return render(request, self.template_name, context)
 
+@method_decorator(login_required, name='dispatch')
 class MyPageView(View):
     template_name = 'mypage.html'
 
