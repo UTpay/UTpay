@@ -3,12 +3,10 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 
 # Ethereum Account
-class Account(models.Model):
+class EthAccount(models.Model):
     user = models.ForeignKey(User)
-    address_lower = models.CharField('Address (lowercase)', max_length=42)
-    address_upper = models.CharField('Address (uppercase)', max_length=42)
+    address = models.CharField('Address', max_length=42)
     password = models.CharField('Password', max_length=30)
-    privatekey = models.CharField('Private Key', max_length=64)
     created_at = models.DateTimeField('作成日時', default=timezone.now)
     modified_at = models.DateTimeField('変更日時', default=timezone.now)
 
@@ -16,5 +14,5 @@ class Account(models.Model):
         return self.address
 
     class Meta:
-        verbose_name = 'Account'
-        verbose_name_plural = 'Accounts'
+        verbose_name = 'ETH Account'
+        verbose_name_plural = 'ETH Accounts'
