@@ -73,6 +73,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'utpay.wsgi.application'
 
+LOGIN_URL = 'accounts:login'
+LOGIN_REDIRECT_URL = 'accounts:mypage'
+
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases

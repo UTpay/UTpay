@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }} - UTpay{% endblock %}
+
+{% block content %}
+  <h2>Log out</h2>
+  <p>ログアウトしました</p>
+  <p><a href={% url 'website:index' %}>トップ</a></p>
+{% endblock %}
