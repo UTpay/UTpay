@@ -24,7 +24,7 @@ class SignUpView(View):
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
             login(request, user)
-            return redirect('/') # mypage
+            return redirect('accounts:mypage')
         else:
             context = {
                 'title': 'Sign up',
