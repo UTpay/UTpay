@@ -31,3 +31,12 @@ class SignUpView(View):
                 'form': form
             }
             return render(request, self.template_name, context)
+
+class MyPageView(View):
+    template_name = 'mypage.html'
+
+    def get(self, request):
+        context = {
+            'title': 'My page'
+        }
+        return render(request, self.template_name, context)

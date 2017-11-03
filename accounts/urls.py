@@ -4,4 +4,5 @@ from .views import *
 
 urlpatterns = [
     url(r'^signup/$', SignUpView.as_view(), name='signup'),
+    url(r'^mypage/$', MyPageView.as_view(), name='mypage')
 ]
