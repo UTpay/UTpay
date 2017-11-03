@@ -21,12 +21,14 @@ class SendForm(forms.Form):
         password = self.cleaned_data.get('password', None)
         if not self.user.check_password(password):
             raise ValidationError('パスワードが違います。')
+        return password
 
     def clean_address(self):
         web3 = Web3(HTTPProvider('http://localhost:8545'))
         address = self.cleaned_data.get('address', None)
         if not web3.isAddress(address):
             raise ValidationError('正しいアドレスを入力してください。')
+        return address
 
     def clean_amount(self):
         eth_account = EthAccount.objects.get(user=self.user)
@@ -40,6 +42,7 @@ class SendForm(forms.Form):
         amount = self.cleaned_data.get('amount', None)
         if balance < amount:
             raise ValidationError('送金可能額を超えています。')
+        return amount
 
     def load_abi(self, file_path):
         artifact = open(file_path, 'r')
