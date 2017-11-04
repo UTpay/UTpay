@@ -1,3 +1,5 @@
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from django.shortcuts import render, get_object_or_404
 from django.views import View
 from django.views.generic import TemplateView
@@ -12,6 +14,7 @@ from .forms import *
 class IndexView(TemplateView):
     template_name = 'index.html'
 
+@method_decorator(login_required, name='dispatch')
 class SendView(View):
     template_name = 'send.html'
 
