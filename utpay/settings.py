@@ -133,6 +133,23 @@ ARTIFACT_PATH = 'static/contracts/ropsten/UTCoin.json'
 UTCOIN_ADDRESS = '0x9bab3c293ca109de331069addced28380c5cc6fc'
 
 
+# Settings for Travis CI
+if 'TRAVIS' in os.environ:
+    SECRET_KEY="rp1=@2u^wjg)xsxql-lxf1zfx@q9dhzma@&vf3o5zzzzc5@ybq"
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'travis_ci',
+            'USER': 'root',
+            'PASSWORD': '',
+            'HOST': '',
+            'OPTIONS': {
+                'charset': 'utf8mb4',
+            },
+        }
+    }
+
+
 # Load all local settings
 try:
     from .local_settings import *
