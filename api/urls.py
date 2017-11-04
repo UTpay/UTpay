@@ -7,6 +7,7 @@ from .views import *
 router = DefaultRouter()
 router.register(r'users', UserViewSet, base_name='user')
 router.register(r'eth_accounts', EthAccountViewSet, base_name='eth_account')
+router.register(r'transactions', TransactionViewSet, base_name='transaction')
 
 urlpatterns = [
     url(r'^', include(router.urls)),

@@ -37,3 +37,11 @@ class EthAccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = EthAccount
         fields = ('id', 'user', 'address')
+
+class TransactionSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    eth_account = EthAccountSerializer()
+
+    class Meta:
+        model = Transaction
+        fields = ('id', 'user', 'eth_account', 'tx_hash', 'from_address', 'to_address', 'amount', 'gas', 'gas_price', 'value', 'network_id', 'is_active', 'created_at')

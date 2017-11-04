@@ -40,3 +40,10 @@ class EthAccountViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         return EthAccount.objects.filter(user=self.request.user)
+
+class TransactionViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = TransactionSerializer
+
+    def get_queryset(self):
+        return Transaction.objects.filter(user=self.request.user)
