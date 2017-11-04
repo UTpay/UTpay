@@ -3,11 +3,16 @@ chardet==3.0.4
 cytoolz==0.8.2
 Django==1.11.7
 django-debug-toolbar==1.8
+django-filter==1.1.0
+djangorestframework==3.7.1
+djangorestframework-jwt==1.11.0
 ethereum-abi-utils==0.4.4
 ethereum-keys==0.1.0a7
 ethereum-tester==0.1.0b2
 ethereum-utils==0.5.1
 idna==2.6
+Markdown==2.6.9
+PyJWT==1.5.3
 pylru==1.0.9
 PyMySQL==0.7.11
 pysha3==1.0.2
