@@ -10,8 +10,9 @@ service: mysql
 install:
   - pip install -r requirements.txt
   - pip install Django==$DJANGO_VERSION
+  - pip install eth-testrpc
 before_script:
   - mysql -u root -e "CREATE DATABASE travis_ci CHARACTER SET utf8mb4"
 script:
-  - python manage.py migrate
+  - testrpc-py &
   - python manage.py test
