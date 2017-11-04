@@ -7,6 +7,7 @@ env:
   - DJANGO_VERSION=1.10
   - DJANGO_VERSION=1.11
 install:
-  - pip install -q Django==$DJANGO_VERSION
+  - pip install -r requirements.txt
+  - pip install Django==$DJANGO_VERSION
 script:
   - python -Wall manage.py test
