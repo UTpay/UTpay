@@ -8,7 +8,7 @@ from web3 import Web3, HTTPProvider
 import json
 
 from .models import *
-from accounts.models import EthAccount
+from accounts.models import EthAccount, Transaction
 from .forms import *
 
 class IndexView(TemplateView):
@@ -63,6 +63,21 @@ class SendView(View):
                     tx_hash = UTCoin.transact({'from': from_address}).transfer(to_address, amount)
                     print('tx_hash:', tx_hash)
                     print('Transaction complete!')
+
+                    # Create Transaction
+                    transaction_info = web3.eth.getTransaction(tx_hash)
+                    transaction = Transaction.objects.create(
+                        user=request.user,
+                        eth_account=eth_account,
+                        tx_hash=tx_hash,
+                        from_address=from_address,
+                        to_address=to_address,
+                        amount=amount,
+                        gas=transaction_info['gas'],
+                        gas_price=transaction_info['gasPrice'],
+                        value=transaction_info['value'],
+                        network_id=transaction_info['networkId']
+                    )
                 except Exception as e:
                     print(e)
             else:
