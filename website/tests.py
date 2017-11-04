@@ -85,5 +85,5 @@ class TestTransfer(TestCase):
 
         tx_hash = self.UTCoin.transact({'from': from_address}).transfer(to_address, amount)
 
-        self.assertEqual(self.UTCoin.call().balanceOf(from_address), from_starting_balance - amount) # 1,000,000 UTC
-        self.assertEqual(self.UTCoin.call().balanceOf(to_address), to_starting_balance + amount) # 1,000,000 UTC
+        self.assertEqual(self.UTCoin.call().balanceOf(from_address), from_starting_balance - amount) # 999,989.877 UTC
+        self.assertEqual(self.UTCoin.call().balanceOf(to_address), to_starting_balance + amount) # 10.123 UTC
