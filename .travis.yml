@@ -8,3 +8,5 @@ env:
   - DJANGO_VERSION=1.11
 install:
   - pip install -q Django==$DJANGO_VERSION
+script:
+  - python -Wall manage.py test
