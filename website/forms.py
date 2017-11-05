@@ -33,7 +33,7 @@ class SendForm(forms.Form):
     def clean_amount(self):
         eth_account = EthAccount.objects.get(user=self.user)
 
-        # Get balance of UTCoin
+        # Get UTCoin balance
         web3 = Web3(HTTPProvider('http://localhost:8545'))
         abi = self.load_abi(settings.ARTIFACT_PATH)
         UTCoin = web3.eth.contract(abi=abi, address=settings.UTCOIN_ADDRESS)

@@ -53,16 +53,13 @@ class SendView(View):
             # TODO: Set fee
             fee = 0.001
 
-            # Send UTCoin
+            # Transfer UTCoin
             web3 = Web3(HTTPProvider('http://localhost:8545'))
             abi = self.load_abi(settings.ARTIFACT_PATH)
             UTCoin = web3.eth.contract(abi=abi, address=settings.UTCOIN_ADDRESS)
             if web3.personal.unlockAccount(from_address, eth_account.password, duration=hex(300)):
-                print('Account unlocked.')
                 try:
                     tx_hash = UTCoin.transact({'from': from_address}).transfer(to_address, amount)
-                    print('tx_hash:', tx_hash)
-                    print('Transaction complete!')
 
                     # Create Transaction
                     transaction_info = web3.eth.getTransaction(tx_hash)
@@ -81,7 +78,7 @@ class SendView(View):
                 except Exception as e:
                     print(e)
             else:
-                print('Failed to unlock account.')
+                print('failed to unlock account')
 
         context = {
             'title': 'コインを送る',
