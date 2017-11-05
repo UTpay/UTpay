@@ -10,4 +10,4 @@ Smart payment service with UTCoin
 - Django 1.11 >=
 
 ## UTpay API
-Please read this [documentation](https://github.com/UTpay/utpay/blob/master/api/README.md)
+Please read this [documentation](https://github.com/UTpay/UTpay/blob/master/api/README.md)
