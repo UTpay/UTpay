@@ -4,7 +4,7 @@ from django.utils.decorators import method_decorator
 from django.shortcuts import render, redirect
 from django.views import View
 from django.db import transaction
-from web3 import Web3, HTTPProvider, IPCProvider
+from web3 import Web3, HTTPProvider
 import secrets
 import string
 
