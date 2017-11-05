@@ -89,13 +89,18 @@ JSON Web Token で認証を行います。
 **GET** /api/v1/users/
 
 ```
-[
-    {
-        "id": 1,
-        "username": "test",
-        "email": "test@example.com"
-    }
-]
+{
+    "count": 1,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "id": 1,
+            "username": "test",
+            "email": "test@example.com"
+        }
+    ]
+}
 ```
 
 ## Ethereum アカウント取得
@@ -110,17 +115,22 @@ JSON Web Token で認証を行います。
 **GET** /api/v1/eth_accounts/
 
 ```
-[
-    {
-        "id": 1,
-        "user": {
+{
+    "count": 1,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
             "id": 1,
-            "username": "test",
-            "email": "test@example.com"
-        },
-        "address": "0x..."
-    }
-]
+            "user": {
+                "id": 1,
+                "username": "test",
+                "email": "test@example.com"
+            },
+            "address": "0x..."
+        }
+    ]
+}
 ```
 
 ## トランザクション取得
@@ -135,36 +145,40 @@ JSON Web Token で認証を行います。
 **GET** /api/v1/transactions/
 
 ```
-[
-    {
-        "id": 1,
-        "user": {
-            "id": 1,
-            "username": "test",
-            "email": "test@example.com"
-        },
-        "eth_account": {
+{
+    "count": 1,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
             "id": 1,
             "user": {
                 "id": 1,
                 "username": "test",
                 "email": "test@example.com"
             },
-            "address": "0x..."
-        },
-        "tx_hash": "0x...",
-        "from_address": "0x...",
-        "to_address": "0x...",
-        "amount": 1000,
-        "gas": 137531,
-        "gas_price": 20000000000,
-        "value": 0,
-        "network_id": 3,
-        "is_active": true,
-        "created_at": "2017-11-04T23:10:31.246998+09:00"
-    },
-    ...
-]
+            "eth_account": {
+                "id": 1,
+                "user": {
+                    "id": 1,
+                    "username": "test",
+                    "email": "test@example.com"
+                },
+                "address": "0x..."
+            },
+            "tx_hash": "0x...",
+            "from_address": "0x...",
+            "to_address": "0x...",
+            "amount": 1000,
+            "gas": 137531,
+            "gas_price": 20000000000,
+            "value": 0,
+            "network_id": 3,
+            "is_active": true,
+            "created_at": "2017-11-04T23:10:31.246998+09:00"
+        }
+    ]
+}
 ```
 
 ## UTCoin 送金
