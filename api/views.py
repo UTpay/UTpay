@@ -1,15 +1,12 @@
 from django.shortcuts import render
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
-from rest_framework import authentication, permissions, generics
+from django.db import transaction
+from rest_framework import authentication, permissions, generics, status, viewsets, filters
 from rest_framework_jwt.settings import api_settings
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.response import Response
-from django.db import transaction
-from django.http import HttpResponse, Http404
-
-from rest_framework import status, viewsets, filters
-from rest_framework.views import APIView
+from django_filters.rest_framework import DjangoFilterBackend
 
 from .serializer import *
 
@@ -44,6 +41,9 @@ class EthAccountViewSet(viewsets.ReadOnlyModelViewSet):
 class TransactionViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = TransactionSerializer
+    filter_backends = (DjangoFilterBackend, filters.OrderingFilter)
+    filter_fields = ('user', 'eth_account', 'tx_hash', 'from_address', 'to_address', 'amount', 'gas', 'gas_price', 'value', 'network_id', 'is_active', 'created_at')
+    ordering_fields = ('amount', 'gas', 'gas_price', 'value', 'created_at')
 
     def get_queryset(self):
         return Transaction.objects.filter(user=self.request.user)
