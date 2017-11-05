@@ -7,7 +7,6 @@ import string
 from accounts.models import *
 
 class UserSerializer(serializers.ModelSerializer):
-    email = serializers.CharField(write_only=True)
     password = serializers.CharField(write_only=True)
 
     class Meta:
