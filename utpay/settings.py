@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',               # djangorestframework
     'django_filters',               # django-filter
+    'corsheaders',                  # django-cors-headers
     'accounts.apps.AccountsConfig', # Accounts
     'website.apps.WebsiteConfig',   # Website
     'api.apps.ApiConfig',           # API
@@ -54,6 +55,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # django-cors-headers
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'utpay.urls'
@@ -145,6 +149,10 @@ JWT_AUTH = {
     'JWT_AUTH_HEADER_PREFIX': 'JWT',
     'JWT_ALLOW_REFRESH': True,
 }
+
+
+# django-cors-headers
+CORS_ORIGIN_ALLOW_ALL = True
 
 
 # Contract settings
