@@ -16,6 +16,7 @@
 - email (required)
 - password (required)
 
+**Response**
 ```
 {
     "id": 1,
@@ -38,6 +39,7 @@ JSON Web Token で認証を行います。
 - username (required)
 - password (required)
 
+**Response**
 ```
 {
     "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo3LCJ1c2VybmFtZSI6InRlc3Q0IiwiZXhwIjoxNTA5ODkxNTAzLCJlbWFpbCI6InRlc3RAdXRwYXkub3JnIiwib3JpZ19pYXQiOjE1MDk4OTExNzN9.q8bnWnWgMUunPFMR5D9J47j-ykdRNljVtqUrSSsMdtU"
@@ -53,6 +55,7 @@ JSON Web Token で認証を行います。
 
 - token (required)
 
+**Response**
 ```
 {
     "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo3LCJ1c2VybmFtZSI6InRlc3Q0IiwiZXhwIjoxNTA5ODkxNTAzLCJlbWFpbCI6InRlc3RAdXRwYXkub3JnIiwib3JpZ19pYXQiOjE1MDk4OTExNzN9.q8bnWnWgMUunPFMR5D9J47j-ykdRNljVtqUrSSsMdtU"
@@ -70,6 +73,7 @@ JSON Web Token で認証を行います。
 
 - token (required)
 
+**Response**
 ```
 {
     "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo3LCJ1c2VybmFtZSI6InRlc3Q0IiwiZXhwIjoxNTA5ODkxNTAzLCJlbWFpbCI6InRlc3RAdXRwYXkub3JnIiwib3JpZ19pYXQiOjE1MDk4OTExNzN9.q8bnWnWgMUunPFMR5D9J47j-ykdRNljVtqUrSSsMdtU"
@@ -88,6 +92,7 @@ JSON Web Token で認証を行います。
 
 **GET** /api/v1/users/
 
+**Response**
 ```
 {
     "count": 1,
@@ -114,6 +119,7 @@ JSON Web Token で認証を行います。
 
 **GET** /api/v1/eth_accounts/
 
+**Response**
 ```
 {
     "count": 1,
@@ -144,6 +150,7 @@ JSON Web Token で認証を行います。
 
 **GET** /api/v1/transactions/
 
+**Response**
 ```
 {
     "count": 1,
@@ -195,6 +202,7 @@ JSON Web Token で認証を行います。
 - address (required)
 - amount (required)
 
+**Response**
 ```
 {
     "success": true,
