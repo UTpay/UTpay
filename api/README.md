@@ -6,6 +6,9 @@
 
 
 ## ユーザ作成
+**HTTP Headers**
+- Content-Type: application/json
+
 **HTTP Request**
 
 **GET** /api/v1/register/
@@ -27,9 +30,12 @@
 
 
 ## 認証
-JSON Web Token で認証を行います。
+[JSON Web Token](https://jwt.io/) による認証を行います。
 
 ### トークン発行
+**HTTP Headers**
+- Content-Type: application/json
+
 **HTTP Request**
 
 **POST** /api/v1/token-auth/
@@ -47,6 +53,9 @@ JSON Web Token で認証を行います。
 ```
 
 ### トークンリフレッシュ
+**HTTP Headers**
+- Content-Type: application/json
+
 **HTTP Request**
 
 **POST** /api/v1/token-refresh/
@@ -64,6 +73,9 @@ JSON Web Token で認証を行います。
 
 ### トークン検証
 トークンが有効であればトークンを返します。
+
+**HTTP Headers**
+- Content-Type: application/json
 
 **HTTP Request**
 
