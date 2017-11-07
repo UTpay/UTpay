@@ -10,7 +10,7 @@ djangorestframework-jwt==1.11.0
 ethereum-abi-utils==0.4.4
 ethereum-keys==0.1.0a7
 ethereum-tester==0.1.0b2
-ethereum-utils==0.5.1
+ethereum-utils==0.6.0
 idna==2.6
 Markdown==2.6.9
 PyJWT==1.5.3
