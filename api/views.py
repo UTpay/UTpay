@@ -64,12 +64,12 @@ class TransactionViewSet(viewsets.ReadOnlyModelViewSet):
         amount = request.POST.get('amount', None)
         if not (to_address and amount):
             error_msg = 'アドレスまたは金額が入力されていません。'
-            print(error_msg)
+            print('Error:', error_msg)
             context = {
                 'success': False,
                 'detail': error_msg
             }
-            return Response(context, status=status.HTTP_400_BAD_REQUEST)
+            return Response(context)
 
         amount = float(amount)
         amount_int = int(amount * num_suffix)
@@ -77,13 +77,13 @@ class TransactionViewSet(viewsets.ReadOnlyModelViewSet):
         # Validate address
         web3 = Web3(HTTPProvider('http://localhost:8545'))
         if not web3.isAddress(to_address):
-            error_msg = 'invalid address'
-            print(error_msg)
+            error_msg = '無効なアドレスです。'
+            print('Error:', error_msg)
             context = {
                 'success': False,
                 'detail': error_msg
             }
-            return Response(context, status=status.HTTP_400_BAD_REQUEST)
+            return Response(context)
 
         # Validate amount
         # Get UTCoin balance
@@ -92,13 +92,13 @@ class TransactionViewSet(viewsets.ReadOnlyModelViewSet):
         balance = UTCoin.call().balanceOf(from_address)
 
         if balance < amount + fee:
-            error_msg = 'insufficient funds'
-            print(error_msg)
+            error_msg = '残高が不足しています。'
+            print('Error:', error_msg)
             context = {
                 'success': False,
                 'detail': error_msg
             }
-            return Response(context, status=status.HTTP_400_BAD_REQUEST)
+            return Response(context)
 
         # Transfer UTCoin
         if web3.personal.unlockAccount(from_address, eth_account.password, duration=hex(300)):
@@ -121,21 +121,21 @@ class TransactionViewSet(viewsets.ReadOnlyModelViewSet):
                 )
             except Exception as e:
                 print(e)
-                error_msg = 'transaction failed'
-                print(error_msg)
+                error_msg = 'トランザクションに失敗しました。'
+                print('Error:', error_msg)
                 context = {
                     'success': False,
                     'detail': error_msg
                 }
-                return Response(context, status=status.HTTP_400_BAD_REQUEST)
+                return Response(context)
         else:
-            error_msg = 'failed to unlock account'
-            print(error_msg)
+            error_msg = 'アカウントのアンロックに失敗しました。'
+            print('Error:', error_msg)
             context = {
                 'success': False,
                 'detail': error_msg
             }
-            return Response(context, status=status.HTTP_400_BAD_REQUEST)
+            return Response(context)
 
         context = {
             'success': True,
