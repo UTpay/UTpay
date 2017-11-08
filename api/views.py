@@ -49,6 +49,7 @@ class EthAccountViewSet(viewsets.ReadOnlyModelViewSet):
         # Get UTCoin balance
         num_suffix = 1000
         web3 = Web3(HTTPProvider('http://localhost:8545'))
+        eth_balance = web3.fromWei(web3.eth.getBalance(address), 'ether')
         abi = self.load_abi(settings.ARTIFACT_PATH)
         UTCoin = web3.eth.contract(abi=abi, address=settings.UTCOIN_ADDRESS)
         balance_int = UTCoin.call().balanceOf(address)
@@ -56,6 +57,7 @@ class EthAccountViewSet(viewsets.ReadOnlyModelViewSet):
 
         context = {
             'address': address,
+            'eth_balance': eth_balance,
             'balance': balance,
             'balance_int': balance_int
         }
