@@ -60,8 +60,18 @@ class TransactionViewSet(viewsets.ReadOnlyModelViewSet):
         fee = 0.001
 
         # Receive params
-        to_address = request.POST['address']
-        amount = float(request.POST['amount'])
+        to_address = request.POST.get('address', None)
+        amount = request.POST.get('amount', None)
+        if not (to_address and amount):
+            error_msg = 'アドレスまたは金額が入力されていません。'
+            print(error_msg)
+            context = {
+                'success': False,
+                'detail': error_msg
+            }
+            return Response(context, status=status.HTTP_400_BAD_REQUEST)
+
+        amount = float(amount)
         amount_int = int(amount * num_suffix)
 
         # Validate address
