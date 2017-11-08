@@ -151,6 +151,27 @@
 }
 ```
 
+### 残高取得
+指定されたアドレスの残高を返します。
+
+**HTTP Headers**
+- Content-Type: application/json
+- Authorization: JWT [token]
+
+**HTTP Request**
+
+**GET** /api/v1/eth_accounts/[address]/get_balance/
+
+**Response**
+```
+{
+    "address": "0x...",
+    "eth_balance": 0.9805516352,
+    "balance": 1000,
+    "balance_int": 1000000
+}
+```
+
 ## トランザクション取得
 認証されたユーザのトランザクション情報を返します。
 
