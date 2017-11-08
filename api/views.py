@@ -41,6 +41,32 @@ class EthAccountViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         return EthAccount.objects.filter(user=self.request.user)
 
+    @detail_route()
+    def get_balance(self, request, pk=None):
+        eth_account = get_object_or_404(EthAccount, address=pk)
+        address = eth_account.address
+
+        # Get UTCoin balance
+        num_suffix = 1000
+        web3 = Web3(HTTPProvider('http://localhost:8545'))
+        abi = self.load_abi(settings.ARTIFACT_PATH)
+        UTCoin = web3.eth.contract(abi=abi, address=settings.UTCOIN_ADDRESS)
+        balance_int = UTCoin.call().balanceOf(address)
+        balance = float(balance_int / num_suffix)
+
+        context = {
+            'address': address,
+            'balance': balance,
+            'balance_int': balance_int
+        }
+        return Response(context)
+
+    def load_abi(self, file_path):
+        artifact = open(file_path, 'r')
+        json_dict = json.load(artifact)
+        abi = json_dict['abi']
+        return abi
+
 class TransactionViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = TransactionSerializer
