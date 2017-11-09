@@ -172,6 +172,25 @@
 }
 ```
 
+### QRコード取得
+指定されたアドレスのQRコード画像のURLを返します。
+
+**HTTP Headers**
+- Content-Type: application/json
+- Authorization: JWT [token]
+
+**HTTP Request**
+
+**GET** /api/v1/eth_accounts/[address]/get_qrcode/
+
+**Response**
+```
+{
+    "address": "0x...",
+    "qrcode_url": "/media/images/qrcode/0x....png"
+}
+```
+
 ## トランザクション取得
 認証されたユーザのトランザクション情報を返します。
 
