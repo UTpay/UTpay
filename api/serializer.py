@@ -43,7 +43,7 @@ class EthAccountSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EthAccount
-        fields = ('id', 'user', 'address')
+        fields = ('id', 'user', 'address', 'qrcode')
 
 class TransactionSerializer(serializers.ModelSerializer):
     user = UserSerializer()
