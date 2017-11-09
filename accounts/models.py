@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 # Ethereum account
 class EthAccount(models.Model):
     user = models.ForeignKey(User)
-    address = models.CharField('Address', max_length=42)
+    address = models.CharField('Address', max_length=42, unique=True)
     password = models.CharField('Password', max_length=30)
     qrcode = models.ImageField('QR code', upload_to='images/qrcode/', null=True, blank=True)
     created_at = models.DateTimeField('作成日時', default=timezone.now)
@@ -22,7 +22,7 @@ class EthAccount(models.Model):
 class Transaction(models.Model):
     user = models.ForeignKey(User)
     eth_account = models.ForeignKey(EthAccount)
-    tx_hash = models.CharField('TxHash', max_length=66)
+    tx_hash = models.CharField('TxHash', max_length=66, unique=True)
     from_address = models.CharField('From', max_length=42)
     to_address = models.CharField('To', max_length=42)
     amount = models.BigIntegerField('Amount', help_text='UTC')
