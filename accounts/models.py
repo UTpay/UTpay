@@ -7,6 +7,7 @@ class EthAccount(models.Model):
     user = models.ForeignKey(User)
     address = models.CharField('Address', max_length=42)
     password = models.CharField('Password', max_length=30)
+    qrcode = models.ImageField('QR code', upload_to='images/qrcode/', null=True, blank=True)
     created_at = models.DateTimeField('作成日時', default=timezone.now)
     modified_at = models.DateTimeField('変更日時', default=timezone.now)
 
