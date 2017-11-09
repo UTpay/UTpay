@@ -48,7 +48,7 @@ class EthAccountSerializer(serializers.ModelSerializer):
 class TransactionSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     eth_account = EthAccountSerializer()
-    created_at = DateTimeFieldAware(format="%Y/%m/%d %H:%M")
+    created_at = DateTimeFieldAware(format="%Y/%m/%d %H:%M:%S")
 
     class Meta:
         model = Transaction
