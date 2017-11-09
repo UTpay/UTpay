@@ -145,7 +145,8 @@
                 "username": "test",
                 "email": "test@example.com"
             },
-            "address": "0x..."
+            "address": "0x...",
+            "qrcode": "http://127.0.0.1:8000/media/images/qrcode/0x....png"
         }
     ]
 }
