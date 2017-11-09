@@ -3,6 +3,7 @@ from django.conf import settings
 from django.core.files import File
 from django.contrib.auth.models import User
 from django.db import transaction
+from django.db.models import Q
 from rest_framework import permissions, generics, status, viewsets, filters
 from rest_framework.response import Response
 from rest_framework.decorators import detail_route, list_route
@@ -65,7 +66,7 @@ class EthAccountViewSet(viewsets.ReadOnlyModelViewSet):
             'balance_int': balance_int
         }
         return Response(context)
-    
+
     @detail_route()
     def get_qrcode(self, request, pk=None):
         eth_account = get_object_or_404(EthAccount, address=pk)
@@ -81,13 +82,13 @@ class EthAccountViewSet(viewsets.ReadOnlyModelViewSet):
             eth_account.qrcode = file_path
             eth_account.save()
             eth_qrcode = eth_account.qrcode
-        
+
         context = {
             'address': address,
             'qrcode_url': eth_qrcode.url
         }
         return Response(context)
-    
+
     def load_abi(self, file_path):
         artifact = open(file_path, 'r')
         json_dict = json.load(artifact)
@@ -102,7 +103,9 @@ class TransactionViewSet(viewsets.ReadOnlyModelViewSet):
     ordering_fields = ('id', 'amount', 'gas', 'gas_price', 'value', 'created_at')
 
     def get_queryset(self):
-        return Transaction.objects.filter(user=self.request.user)
+        eth_account = get_object_or_404(EthAccount, user=self.request.user)
+        address = eth_account.address
+        return Transaction.objects.filter(Q(from_address=address) | Q(to_address=address))
 
     @list_route(methods=['post'])
     @transaction.atomic
