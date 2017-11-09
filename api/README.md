@@ -234,7 +234,7 @@
             "value": 0,
             "network_id": 3,
             "is_active": true,
-            "created_at": "2017-11-04T23:10:31.246998+09:00"
+            "created_at": "2017/11/04 23:10:31"
         }
     ]
 }
@@ -286,7 +286,7 @@
         "value": 0,
         "network_id": 3,
         "is_active": true,
-        "created_at": "2017-11-05T22:32:44.788388+09:00"
+        "created_at": "2017/11/04 23:10:31"
     }
 }
 ```
