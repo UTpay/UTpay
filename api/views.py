@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.conf import settings
+from django.core.files import File
 from django.contrib.auth.models import User
 from django.db import transaction
 from rest_framework import permissions, generics, status, viewsets, filters
@@ -8,6 +9,8 @@ from rest_framework.decorators import detail_route, list_route
 from django_filters.rest_framework import DjangoFilterBackend
 from web3 import Web3, HTTPProvider
 import json
+
+import qrcode
 
 from .serializer import *
 
@@ -44,7 +47,7 @@ class EthAccountViewSet(viewsets.ReadOnlyModelViewSet):
     @detail_route()
     def get_balance(self, request, pk=None):
         eth_account = get_object_or_404(EthAccount, address=pk)
-        address = eth_account.address
+        address = pk
 
         # Get UTCoin balance
         num_suffix = 1000
@@ -62,7 +65,29 @@ class EthAccountViewSet(viewsets.ReadOnlyModelViewSet):
             'balance_int': balance_int
         }
         return Response(context)
+    
+    @detail_route()
+    def get_qrcode(self, request, pk=None):
+        eth_account = get_object_or_404(EthAccount, address=pk)
+        address = pk
+        eth_qrcode = eth_account.qrcode
 
+        if not eth_qrcode:
+            # Generate QR code
+            img = qrcode.make(address)
+            file_name = address + '.png'
+            file_path = '/images/qrcode/' + file_name
+            img.save(settings.MEDIA_ROOT + file_path)
+            eth_account.qrcode = file_path
+            eth_account.save()
+            eth_qrcode = eth_account.qrcode
+        
+        context = {
+            'address': address,
+            'qrcode_url': eth_qrcode.url
+        }
+        return Response(context)
+    
     def load_abi(self, file_path):
         artifact = open(file_path, 'r')
         json_dict = json.load(artifact)
