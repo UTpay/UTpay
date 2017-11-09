@@ -6,6 +6,14 @@ import string
 
 from accounts.models import *
 
+class DateTimeFieldAware(serializers.DateTimeField):
+    """
+    Class to make output of a DateTime Field timezone aware
+    """
+    def to_representation(self, value):
+        value = timezone.localtime(value)
+        return super(DateTimeFieldAware, self).to_representation(value)
+
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 
@@ -40,6 +48,7 @@ class EthAccountSerializer(serializers.ModelSerializer):
 class TransactionSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     eth_account = EthAccountSerializer()
+    created_at = DateTimeFieldAware(format="%Y/%m/%d %H:%M")
 
     class Meta:
         model = Transaction
