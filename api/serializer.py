@@ -1,8 +1,10 @@
+from django.conf import settings
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from web3 import Web3, HTTPProvider
 import secrets
 import string
+import qrcode
 
 from accounts.models import *
 
@@ -25,11 +27,19 @@ class UserSerializer(serializers.ModelSerializer):
         # Create User
         user = User.objects.create_user(username=validated_data['username'], email=validated_data['email'], password=validated_data['password'])
 
-        # Create EthAccount
+        # Generate random password and address
         web3 = Web3(HTTPProvider('http://localhost:8545'))
         password = self.make_random_password(length=30)
         address = web3.personal.newAccount(password)
-        eth_account = EthAccount.objects.create(user=user, address=address, password=password)
+
+        # Generate QR code
+        img = qrcode.make(address)
+        file_name = address + '.png'
+        file_path = '/images/qrcode/' + file_name
+        img.save(settings.MEDIA_ROOT + file_path)
+
+        # Create EthAccount
+        eth_account = EthAccount.objects.create(user=user, address=address, password=password, qrcode=file_path)
 
         return user
 

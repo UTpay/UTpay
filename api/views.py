@@ -10,7 +10,6 @@ from rest_framework.decorators import detail_route, list_route
 from django_filters.rest_framework import DjangoFilterBackend
 from web3 import Web3, HTTPProvider
 import json
-
 import qrcode
 
 from .serializer import *
