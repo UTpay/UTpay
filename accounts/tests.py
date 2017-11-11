@@ -1,12 +1,11 @@
 from django.test import TestCase
-from django.conf import settings
 from django.contrib.auth.models import User
 from web3 import Web3, HTTPProvider
 import secrets
 import string
 import qrcode
 
-from .models import *
+from .models import EthAccount
 
 class UserModelTests(TestCase):
     def create_user(self):
