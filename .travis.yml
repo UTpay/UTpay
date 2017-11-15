@@ -10,10 +10,8 @@ install:
   - pip install Django==$DJANGO_VERSION
   - pip install eth-testrpc
 before_script:
-  - {
-  -     echo 'def transfer_callback(transaction):'
-  -     echo '    pass'
-  - } > callback_functions/transfer_callback.py
+  - echo 'def transfer_callback(transaction):' > callback_functions/transfer_callback.py
+  - echo '    pass' >> callback_functions/transfer_callback.py
   - mysql -u root -e "CREATE DATABASE travis_ci CHARACTER SET utf8mb4"
   - testrpc-py &
 script:
