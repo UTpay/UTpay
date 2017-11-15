@@ -13,6 +13,7 @@ import json
 import qrcode
 
 from .serializer import *
+from callback_functions.transfer_callback import transfer_callback
 
 class RegisterView(generics.CreateAPIView):
     """
@@ -183,6 +184,15 @@ class TransactionViewSet(viewsets.ReadOnlyModelViewSet):
                     'detail': error_msg
                 }
                 return Response(context)
+
+            # Execute callback function
+            try:
+                transfer_callback(transaction)
+            except Exception as e:
+                print(e)
+                error_msg = 'コールバック処理に失敗しました。'
+                print('Error:', error_msg)
+
         else:
             error_msg = 'アカウントのアンロックに失敗しました。'
             print('Error:', error_msg)
