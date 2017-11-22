@@ -113,7 +113,7 @@ class TransactionViewSet(viewsets.ReadOnlyModelViewSet):
         eth_account = get_object_or_404(EthAccount, user=request.user)
         from_address = eth_account.address
         num_suffix = 1000
-        amount_min = 0.001
+        amount_min = 1 / num_suffix
         fee = 0.001
 
         # Receive params
