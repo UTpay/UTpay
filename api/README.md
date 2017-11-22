@@ -11,7 +11,7 @@
 
 **HTTP Request**
 
-**GET** /api/v1/register/
+**POST** /api/v1/register/
 
 **Parameters**
 
