@@ -113,6 +113,7 @@ class TransactionViewSet(viewsets.ReadOnlyModelViewSet):
         eth_account = get_object_or_404(EthAccount, user=request.user)
         from_address = eth_account.address
         num_suffix = 1000
+        amount_min = 0.001
         fee = 0.001
 
         # Receive params
@@ -142,6 +143,15 @@ class TransactionViewSet(viewsets.ReadOnlyModelViewSet):
             return Response(context)
 
         # Validate amount
+        if amount < amount_min:
+            error_msg = '金額が不正です。'
+            print('Error:', error_msg)
+            context = {
+                'success': False,
+                'detail': error_msg
+            }
+            return Response(context)
+
         # Get UTCoin balance
         abi = self.load_abi(settings.ARTIFACT_PATH)
         UTCoin = web3.eth.contract(abi=abi, address=settings.UTCOIN_ADDRESS)
