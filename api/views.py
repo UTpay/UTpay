@@ -117,8 +117,9 @@ class TransactionViewSet(viewsets.ReadOnlyModelViewSet):
         fee = 0.001
 
         # Receive params
-        to_address = request.POST.get('address', None)
-        amount = request.POST.get('amount', None)
+        body = json.loads(request.body)
+        to_address = body['address']
+        amount = body['amount']
         if not (to_address and amount):
             error_msg = 'アドレスまたは金額が入力されていません。'
             print('Error:', error_msg)
