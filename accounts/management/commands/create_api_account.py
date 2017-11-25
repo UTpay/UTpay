@@ -11,7 +11,7 @@ import qrcode
 from accounts.models import Api
 
 class Command(BaseCommand):
-    help = 'Create Ethereum account for user defined API.'
+    help = 'Create Ethereum account for the user defined API.'
 
     def add_arguments(self, parser):
         parser.add_argument('api_id', type=int, help='API object ID')

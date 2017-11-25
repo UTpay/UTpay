@@ -40,7 +40,7 @@ class Transaction(models.Model):
         verbose_name = 'Transaction'
         verbose_name_plural = 'Transactions'
 
-# API registered by users
+# User defined API
 class Api(models.Model):
     user = models.ForeignKey(User)
     address = models.CharField('Address', max_length=42, unique=True, null=True, blank=True)
