@@ -43,14 +43,14 @@ class Transaction(models.Model):
 # API registered by users
 class Api(models.Model):
     user = models.ForeignKey(User)
-    address = models.CharField('Address', max_length=42, unique=True)
-    password = models.CharField('Password', max_length=30)
+    address = models.CharField('Address', max_length=42, unique=True, null=True, blank=True)
+    password = models.CharField('Password', max_length=30, null=True, blank=True)
     qrcode = models.ImageField('QR code', upload_to='images/qrcode/api/', null=True, blank=True)
     name = models.CharField('名前', max_length=255)
     description = models.TextField('説明', null=True, blank=True)
     code = models.TextField('ソースコード', default='pass')
-    is_verified = models.BooleanField('認証済み', default=False)
     is_active = models.BooleanField('有効', default=True)
+    is_verified = models.BooleanField('認証済み', default=False)
     is_banned = models.BooleanField('禁止', default=False)
     verified_at = models.DateTimeField('認証日時', null=True, blank=True)
     created_at = models.DateTimeField('作成日時', default=timezone.now)
