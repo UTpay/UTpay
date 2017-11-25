@@ -18,7 +18,7 @@ class TransactionAdmin(admin.ModelAdmin):
     ordering = ('id',)
 
 class ApiAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'address', 'password', 'name', 'is_active', 'is_verified', 'is_banned', 'created_at', 'modified_at')
+    list_display = ('id', 'user', 'address', 'password', 'name', 'is_active', 'is_verified', 'is_banned', 'verified_at', 'created_at', 'modified_at')
     list_filter = ('user', 'is_active', 'is_verified', 'is_banned', 'verified_at', 'created_at', 'modified_at')
     ordering = ('id',)
 
