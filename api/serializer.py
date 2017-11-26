@@ -58,8 +58,13 @@ class EthAccountSerializer(serializers.ModelSerializer):
 class TransactionSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     eth_account = EthAccountSerializer()
+    amount_fixed = serializers.SerializerMethodField()
     created_at = DateTimeFieldAware(format="%Y/%m/%d %H:%M:%S")
+
+    def get_amount_fixed(self, obj):
+        num_suffix = 1000
+        return obj.amount / num_suffix
 
     class Meta:
         model = Transaction
-        fields = ('id', 'user', 'eth_account', 'tx_hash', 'from_address', 'to_address', 'amount', 'gas', 'gas_price', 'value', 'network_id', 'is_active', 'created_at')
+        fields = ('id', 'user', 'eth_account', 'tx_hash', 'from_address', 'to_address', 'amount', 'amount_fixed', 'gas', 'gas_price', 'value', 'network_id', 'is_active', 'created_at')
