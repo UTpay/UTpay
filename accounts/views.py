@@ -1,7 +1,7 @@
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.db import transaction
 from web3 import Web3, HTTPProvider
@@ -9,7 +9,7 @@ import secrets
 import string
 
 from .models import *
-from .forms import SignUpForm
+from .forms import *
 
 class SignUpView(View):
     template_name = 'signup.html'
@@ -18,7 +18,7 @@ class SignUpView(View):
         form = SignUpForm()
         context = {
             'title': 'Sign up',
-            'form': form
+            'form': form,
         }
         return render(request, self.template_name, context)
 
@@ -45,7 +45,7 @@ class SignUpView(View):
         else:
             context = {
                 'title': 'Sign up',
-                'form': form
+                'form': form,
             }
             return render(request, self.template_name, context)
 
@@ -60,6 +60,40 @@ class MyPageView(View):
 
     def get(self, request):
         context = {
-            'title': 'My page'
+            'title': 'My page',
+        }
+        return render(request, self.template_name, context)
+
+@method_decorator(login_required, name='dispatch')
+class ApiView(View):
+    template_name = 'api.html'
+
+    def get(self, request):
+        context = {
+            'title': 'API',
+        }
+        return render(request, self.template_name, context)
+
+@method_decorator(login_required, name='dispatch')
+class ApiRegisterView(View):
+    template_name = 'api_register.html'
+
+    def get(self, request):
+        form = ApiForm
+        context = {
+            'title': 'APIを登録する',
+            'form': form,
+        }
+        return render(request, self.template_name, context)
+
+@method_decorator(login_required, name='dispatch')
+class ApiDetailView(View):
+    template_name = 'api_detail.html'
+
+    def get(self, request, address):
+        api = get_object_or_404(Api, user=request.user, address=address)
+        context = {
+            'title': api.name,
+            'api': api,
         }
         return render(request, self.template_name, context)

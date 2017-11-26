@@ -4,4 +4,5 @@
 
 {% block content %}
   <p>Hello @{{ user.username }} !</p>
+  <p><a href="{% url 'accounts:api' %}">API</a></p>
 {% endblock %}
