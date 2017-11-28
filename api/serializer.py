@@ -68,3 +68,8 @@ class TransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
         fields = ('id', 'user', 'eth_account', 'tx_hash', 'from_address', 'to_address', 'amount', 'amount_fixed', 'gas', 'gas_price', 'value', 'network_id', 'is_active', 'created_at')
+
+class ContractSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Contract
+        fields = ('id', 'address', 'qrcode', 'name', 'description', 'code', 'is_active', 'is_verified', 'is_banned', 'verified_at', 'created_at', 'modified_at')

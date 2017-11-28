@@ -227,3 +227,25 @@ class TransactionViewSet(viewsets.ReadOnlyModelViewSet):
         json_dict = json.load(artifact)
         abi = json_dict['abi']
         return abi
+
+class ContractViewSet(viewsets.ModelViewSet):
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = ContractSerializer
+    queryset = Contract.objects.all()
+
+    def list(self, request):
+        queryset = Contract.objects.filter(user=self.request.user)
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk=None):
+        queryset = Contract.objects.all()
+        contract = get_object_or_404(queryset, address=pk)
+        serializer = ContractSerializer(contract)
+        return Response(serializer.data)
