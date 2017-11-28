@@ -98,7 +98,7 @@
 
 **HTTP Headers**
 - Content-Type: application/json
-- Authorization: JWT [token]
+- Authorization: Bearer [token]
 
 **HTTP Request**
 
@@ -125,7 +125,7 @@
 
 **HTTP Headers**
 - Content-Type: application/json
-- Authorization: JWT [token]
+- Authorization: Bearer [token]
 
 **HTTP Request**
 
@@ -157,7 +157,7 @@
 
 **HTTP Headers**
 - Content-Type: application/json
-- Authorization: JWT [token]
+- Authorization: Bearer [token]
 
 **HTTP Request**
 
@@ -178,7 +178,7 @@
 
 **HTTP Headers**
 - Content-Type: application/json
-- Authorization: JWT [token]
+- Authorization: Bearer [token]
 
 **HTTP Request**
 
@@ -199,7 +199,7 @@
 
 **HTTP Headers**
 - Content-Type: application/json
-- Authorization: JWT [token]
+- Authorization: Bearer [token]
 
 **HTTP Request**
 
@@ -247,7 +247,7 @@
 ## UTCoin 送金
 **HTTP Headers**
 - Content-Type: application/json
-- Authorization: JWT [token]
+- Authorization: Bearer [token]
 
 **HTTP Request**
 
