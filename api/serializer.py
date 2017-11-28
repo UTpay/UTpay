@@ -70,6 +70,10 @@ class TransactionSerializer(serializers.ModelSerializer):
         fields = ('id', 'user', 'eth_account', 'tx_hash', 'from_address', 'to_address', 'amount', 'amount_fixed', 'gas', 'gas_price', 'value', 'network_id', 'is_active', 'created_at')
 
 class ContractSerializer(serializers.ModelSerializer):
+    verified_at = DateTimeFieldAware(format="%Y/%m/%d %H:%M:%S")
+    created_at = DateTimeFieldAware(format="%Y/%m/%d %H:%M:%S")
+    modified_at = DateTimeFieldAware(format="%Y/%m/%d %H:%M:%S")
+
     class Meta:
         model = Contract
         fields = ('id', 'address', 'qrcode', 'name', 'description', 'code', 'is_active', 'is_verified', 'is_banned', 'verified_at', 'created_at', 'modified_at')
