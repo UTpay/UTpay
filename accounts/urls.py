@@ -7,7 +7,7 @@ urlpatterns = [
     url(r'^login/$', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
     url(r'^logout/$', auth_views.LogoutView.as_view(template_name='logout.html'), name='logout'),
     url(r'^mypage/$', MyPageView.as_view(), name='mypage'),
-    url(r'^mypage/api/$', ApiView.as_view(), name='api'),
-    url(r'^mypage/api/register/$', ApiRegisterView.as_view(), name='api_register'),
-    url(r'^mypage/api/(?P<address>\w+)/$', ApiDetailView.as_view(), name='api_detail'),
+    url(r'^mypage/contract/$', ContractView.as_view(), name='contract'),
+    url(r'^mypage/contract/register/$', ContractRegisterView.as_view(), name='contract_register'),
+    url(r'^mypage/contract/(?P<address>\w+)/$', ContractDetailView.as_view(), name='contract_detail'),
 ]

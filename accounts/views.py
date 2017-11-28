@@ -65,35 +65,35 @@ class MyPageView(View):
         return render(request, self.template_name, context)
 
 @method_decorator(login_required, name='dispatch')
-class ApiView(View):
-    template_name = 'api.html'
+class ContractView(View):
+    template_name = 'contract.html'
 
     def get(self, request):
         context = {
-            'title': 'API',
+            'title': 'コントラクト',
         }
         return render(request, self.template_name, context)
 
 @method_decorator(login_required, name='dispatch')
-class ApiRegisterView(View):
-    template_name = 'api_register.html'
+class ContractRegisterView(View):
+    template_name = 'contract_register.html'
 
     def get(self, request):
-        form = ApiForm
+        form = ContractForm
         context = {
-            'title': 'APIを登録する',
+            'title': 'コントラクトを登録する',
             'form': form,
         }
         return render(request, self.template_name, context)
 
 @method_decorator(login_required, name='dispatch')
-class ApiDetailView(View):
-    template_name = 'api_detail.html'
+class ContractDetailView(View):
+    template_name = 'contract_detail.html'
 
     def get(self, request, address):
-        api = get_object_or_404(Api, user=request.user, address=address)
+        contract = get_object_or_404(Contract, user=request.user, address=address)
         context = {
-            'title': api.name,
-            'api': api,
+            'title': contract.name,
+            'contract': contract,
         }
         return render(request, self.template_name, context)

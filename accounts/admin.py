@@ -17,7 +17,7 @@ class TransactionAdmin(admin.ModelAdmin):
     list_filter = ('user', 'eth_account', 'from_address', 'to_address', 'amount', 'gas', 'gas_price', 'value', 'network_id', 'is_active', 'created_at')
     ordering = ('id',)
 
-class ApiAdmin(admin.ModelAdmin):
+class ContractAdmin(admin.ModelAdmin):
     list_display = ('id', 'user', 'address', 'password', 'name', 'is_active', 'is_verified', 'is_banned', 'verified_at', 'created_at', 'modified_at')
     list_filter = ('user', 'is_active', 'is_verified', 'is_banned', 'verified_at', 'created_at', 'modified_at')
     ordering = ('id',)
@@ -26,4 +26,4 @@ admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 admin.site.register(EthAccount, EthAccountAdmin)
 admin.site.register(Transaction, TransactionAdmin)
-admin.site.register(Api, ApiAdmin)
+admin.site.register(Contract, ContractAdmin)

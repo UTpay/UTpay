@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }} - UTpay{% endblock %}
+
+{% block content %}
+  <h2>コントラクト</h2>
+  <p>UTCoin が送金された時に実行するコントラクトを登録することができます。</p>
+  <p><a href="{% url 'accounts:contract_register' %}">コントラクトを登録する</a></p>
+{% endblock %}

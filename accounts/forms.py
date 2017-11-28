@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.forms import ModelForm
 
-from .models import Api
+from .models import Contract
 
 class SignUpForm(UserCreationForm):
     first_name = forms.CharField(max_length=30, required=False, help_text='この項目は任意です。')
@@ -14,7 +14,7 @@ class SignUpForm(UserCreationForm):
         model = User
         fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2')
 
-class ApiForm(ModelForm):
+class ContractForm(ModelForm):
     class Meta:
-        model = Api
+        model = Contract
         fields = ['name', 'description', 'code']

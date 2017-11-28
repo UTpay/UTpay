@@ -3,35 +3,35 @@
 {% block title %}{{ title }} - UTpay{% endblock %}
 
 {% block content %}
-  <h2>{{ api.name }}</h2>
+  <h2>{{ contract.name }}</h2>
 
   <div class="address">
-    <p>{{ api.address }}</p>
-    <img src="{{ api.qrcode.url }}" alt="{{ api.address }}">
+    <p>{{ contract.address }}</p>
+    <img src="{{ contract.qrcode.url }}" alt="{{ contract.address }}">
   </div>
 
   <div class="description">
     <h3>説明</h3>
-    <p>{{ api.description }}</p>
+    <p>{{ contract.description }}</p>
   </div>
 
   <div class="code">
     <h3>ソースコード</h3>
-    <pre>{{ api.code }}</pre>
+    <pre>{{ contract.code }}</pre>
   </div>
 
   <div class="created_at">
     <h3>作成日時</h3>
-    <p>{{ api.created_at }}</p>
+    <p>{{ contract.created_at }}</p>
   </div>
 
   <div class="modified_at">
     <h3>変更日時</h3>
-    <p>{{ api.modified_at }}</p>
+    <p>{{ contract.modified_at }}</p>
   </div>
 
   <div class="verified_at">
     <h3>認証日時</h3>
-    <p>{{ api.verified_at }}</p>
+    <p>{{ contract.verified_at }}</p>
   </div>
 {% endblock %}

@@ -40,12 +40,12 @@ class Transaction(models.Model):
         verbose_name = 'Transaction'
         verbose_name_plural = 'Transactions'
 
-# User defined API
-class Api(models.Model):
+# User defined function
+class Contract(models.Model):
     user = models.ForeignKey(User)
     address = models.CharField('Address', max_length=42, unique=True, null=True, blank=True)
     password = models.CharField('Password', max_length=30, null=True, blank=True)
-    qrcode = models.ImageField('QR code', upload_to='images/qrcode/api/', null=True, blank=True)
+    qrcode = models.ImageField('QR code', upload_to='images/qrcode/contract/', null=True, blank=True)
     name = models.CharField('名前', max_length=255)
     description = models.TextField('説明', null=True, blank=True, help_text='他の利用者に公開されます。')
     code = models.TextField('ソースコード', default='pass', help_text='`address`, `amount` の2つの変数を使用できます。')
@@ -60,5 +60,5 @@ class Api(models.Model):
         return self.name
 
     class Meta:
-        verbose_name = 'API'
-        verbose_name_plural = 'APIs'
+        verbose_name = 'Contract'
+        verbose_name_plural = 'Contracts'
