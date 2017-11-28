@@ -48,7 +48,7 @@ class Contract(models.Model):
     qrcode = models.ImageField('QR code', upload_to='images/qrcode/contract/', null=True, blank=True)
     name = models.CharField('名前', max_length=255)
     description = models.TextField('説明', null=True, blank=True, help_text='他の利用者に公開されます。')
-    code = models.TextField('ソースコード', default='pass', help_text='`address`, `amount` の2つの変数を使用できます。')
+    code = models.TextField('ソースコード', default='pass', help_text='変数 `tx_hash`, `from_address`, `to_address`, `amount`, `amount_fixed` を使用できます。')
     is_active = models.BooleanField('有効', default=True)
     is_verified = models.BooleanField('認証済み', default=False)
     is_banned = models.BooleanField('禁止', default=False)

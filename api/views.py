@@ -198,7 +198,7 @@ class TransactionViewSet(viewsets.ReadOnlyModelViewSet):
 
             # Execute callback function
             try:
-                transfer_callback(transaction)
+                transfer_callback(tx_hash, from_address, to_address, amount_int, amount)
             except Exception as e:
                 print(e)
                 error_msg = 'コールバック処理に失敗しました。'
