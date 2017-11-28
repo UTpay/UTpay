@@ -295,3 +295,68 @@
     }
 }
 ```
+
+## コントラクト取得
+認証されたユーザのコントラクト情報を返します。
+
+**HTTP Headers**
+- Content-Type: application/json
+- Authorization: Bearer [token]
+
+**HTTP Request**
+
+**GET** /api/v1/contracts/
+
+**Response**
+```
+{
+    "count": 1,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "id": 1,
+            "address": "0x...",
+            "qrcode": "http://127.0.0.1:8000/media/images/qrcode/contract/0x....png",
+            "name": "Test Contract",
+            "description": "This is a test contract.",
+            "code": "pass",
+            "is_active": true,
+            "is_verified": true,
+            "is_banned": false,
+            "verified_at": "2017/11/28 19:28:08",
+            "created_at": "2017/11/28 19:19:17",
+            "modified_at": "2017/11/28 19:28:08"
+        }
+    ]
+}
+```
+
+### 特定のコントラクトを取得
+指定されたアドレスのコントラクト情報を返します。
+
+**HTTP Headers**
+- Content-Type: application/json
+- Authorization: Bearer [token]
+
+**HTTP Request**
+
+**GET** /api/v1/contracts/[address]/
+
+**Response**
+```
+{
+    "id": 1,
+    "address": "0x...",
+    "qrcode": "/media/images/qrcode/contract/0x....png",
+    "name": "Test Contract",
+    "description": "This is a test contract.",
+    "code": "pass",
+    "is_active": true,
+    "is_verified": true,
+    "is_banned": false,
+    "verified_at": "2017/11/28 19:28:08",
+    "created_at": "2017/11/28 19:19:17",
+    "modified_at": "2017/11/28 19:28:08"
+}
+```
