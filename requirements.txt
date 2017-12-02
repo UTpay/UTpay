@@ -7,6 +7,11 @@ django-debug-toolbar==1.9.1
 django-filter==1.1.0
 djangorestframework==3.7.3
 djangorestframework-jwt==1.11.0
+eth-abi==0.5.0
+eth-keyfile==0.4.0
+eth-keys==0.1.0b3
+eth-tester==0.1.0b3
+eth-utils==0.7.1
 ethereum-abi-utils==0.4.4
 ethereum-keys==0.1.0a7
 ethereum-tester==0.1.0b2
@@ -15,6 +20,7 @@ idna==2.6
 Markdown==2.6.9
 olefile==0.44
 Pillow==4.3.0
+pycryptodome==3.4.7
 PyJWT==1.5.3
 pylru==1.0.9
 PyMySQL==0.7.11
@@ -27,5 +33,6 @@ semantic-version==2.6.0
 six==1.11.0
 sqlparse==0.2.4
 toolz==0.8.2
+typing==3.6.2
 urllib3==1.22
 web3==3.16.4
