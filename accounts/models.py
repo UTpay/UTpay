@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 # Ethereum account
 class EthAccount(models.Model):
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
     address = models.CharField('Address', max_length=42, unique=True)
     password = models.CharField('Password', max_length=30)
     qrcode = models.ImageField('QR code', upload_to='images/qrcode/', null=True, blank=True)
@@ -20,8 +20,8 @@ class EthAccount(models.Model):
 
 # Transaction information
 class Transaction(models.Model):
-    user = models.ForeignKey(User)
-    eth_account = models.ForeignKey(EthAccount)
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    eth_account = models.ForeignKey(EthAccount, on_delete=models.PROTECT)
     tx_hash = models.CharField('TxHash', max_length=66, unique=True)
     from_address = models.CharField('From', max_length=42)
     to_address = models.CharField('To', max_length=42)
@@ -42,7 +42,7 @@ class Transaction(models.Model):
 
 # User defined function
 class Contract(models.Model):
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
     address = models.CharField('Address', max_length=42, unique=True, null=True, blank=True)
     password = models.CharField('Password', max_length=30, null=True, blank=True)
     qrcode = models.ImageField('QR code', upload_to='images/qrcode/contract/', null=True, blank=True)

@@ -4,6 +4,8 @@ from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify
 
 from .views import *
 
+app_name = 'api'
+
 router = DefaultRouter()
 router.register(r'users', UserViewSet, base_name='user')
 router.register(r'eth_accounts', EthAccountViewSet, base_name='eth_account')
