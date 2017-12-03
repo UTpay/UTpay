@@ -19,10 +19,10 @@ from django.contrib import admin
 from django.conf.urls.static import static
 
 urlpatterns = [
-    url('', include('website.urls', namespace='website')),
+    url('', include('website.urls')),
     url(r'^admin/', admin.site.urls),
-    url(r'^accounts/', include('accounts.urls', namespace='accounts')),
-    url(r'^api/v1/', include('api.urls', namespace='api')),
+    url(r'^accounts/', include('accounts.urls')),
+    url(r'^api/v1/', include('api.urls')),
 ]
 
 # media
