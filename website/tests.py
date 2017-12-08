@@ -13,7 +13,7 @@ class TestTotalSupply(TestCase):
         artifact = open(settings.ARTIFACT_PATH, 'r')
         json_dict = json.load(artifact)
         abi = json_dict['abi']
-        bytecode = json_dict['unlinked_binary']
+        bytecode = json_dict['bytecode']
 
         # Deploy contract
         UTCoin = web3.eth.contract(abi=abi, bytecode=bytecode)
@@ -36,7 +36,7 @@ class TestBalanceOf(TestCase):
         artifact = open(settings.ARTIFACT_PATH, 'r')
         json_dict = json.load(artifact)
         abi = json_dict['abi']
-        bytecode = json_dict['unlinked_binary']
+        bytecode = json_dict['bytecode']
 
         # Deploy contract
         UTCoin = web3.eth.contract(abi=abi, bytecode=bytecode)
@@ -61,7 +61,7 @@ class TestTransfer(TestCase):
         artifact = open(settings.ARTIFACT_PATH, 'r')
         json_dict = json.load(artifact)
         abi = json_dict['abi']
-        bytecode = json_dict['unlinked_binary']
+        bytecode = json_dict['bytecode']
 
         # Deploy contract
         UTCoin = web3.eth.contract(abi=abi, bytecode=bytecode)
