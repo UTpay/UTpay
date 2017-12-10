@@ -166,7 +166,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 # Ropsten
 ARTIFACT_PATH = 'static/contracts/ropsten/UTCoin.json'
-UTCOIN_ADDRESS = '0x9bab3c293ca109de331069addced28380c5cc6fc'
+UTCOIN_ADDRESS = '0x7a58dc29bd83745656fe4dda96f0ed7192d35bf4'
 
 
 # Load all local settings
