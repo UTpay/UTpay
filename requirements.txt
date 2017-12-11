@@ -12,9 +12,9 @@ eth-keyfile==0.4.0
 eth-keys==0.1.0b3
 eth-tester==0.1.0b5
 eth-utils==0.7.1
-ethereum-abi-utils==0.4.4
-ethereum-keys==0.1.0a7
-ethereum-tester==0.1.0b2
+ethereum-abi-utils==0.4.5
+ethereum-keys==0.1.0a9
+ethereum-tester==0.1.0b3
 ethereum-utils==0.6.2
 idna==2.6
 Markdown==2.6.10
