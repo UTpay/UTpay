@@ -33,6 +33,6 @@ semantic-version==2.6.0
 six==1.11.0
 sqlparse==0.2.4
 toolz==0.9.0
-typing==3.6.2
+typing==3.6.4
 urllib3==1.22
 web3==3.16.4
