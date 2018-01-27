@@ -17,7 +17,7 @@ class SignUpView(View):
     def get(self, request):
         form = SignUpForm()
         context = {
-            'title': 'Sign up',
+            'title': 'サインアップ',
             'form': form,
         }
         return render(request, self.template_name, context)
@@ -44,7 +44,7 @@ class SignUpView(View):
             return redirect('accounts:mypage')
         else:
             context = {
-                'title': 'Sign up',
+                'title': 'サインアップ',
                 'form': form,
             }
             return render(request, self.template_name, context)
@@ -60,7 +60,7 @@ class MyPageView(View):
 
     def get(self, request):
         context = {
-            'title': 'My page',
+            'title': 'マイページ',
         }
         return render(request, self.template_name, context)
 
