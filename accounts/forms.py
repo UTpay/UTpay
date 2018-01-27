@@ -39,6 +39,13 @@ class SignUpForm(UserCreationForm):
         widget=forms.PasswordInput(attrs={'class': 'mdl-textfield__input'}),
     )
 
+    def clean_email(self):
+        email = self.cleaned_data.get('email', None)
+        domain = email.split('@')[1]
+        if 'u-tokyo.ac.jp' not in domain:
+            raise forms.ValidationError('東京大学のドメイン(u-tokyo.ac.jp)が含まれていません。')
+        return email
+
     class Meta:
         model = User
         fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2')
