@@ -15,8 +15,8 @@ class IndexView(TemplateView):
     template_name = 'index.html'
 
 @method_decorator(login_required, name='dispatch')
-class SendView(View):
-    template_name = 'send.html'
+class TransferView(View):
+    template_name = 'transfer.html'
 
     def get(self, request):
         eth_account = get_object_or_404(EthAccount, user=request.user)
@@ -32,7 +32,7 @@ class SendView(View):
         if balance < 0:
             balance = 0
 
-        form = SendForm(user=request.user, initial={'fee': fee, 'balance': balance})
+        form = TransferForm(user=request.user, initial={'fee': fee, 'balance': balance})
 
         context = {
             'title': 'コインを送る',
@@ -45,7 +45,7 @@ class SendView(View):
         from_address = eth_account.address
         num_suffix = 1000
 
-        form = SendForm(user=request.user, data=request.POST)
+        form = TransferForm(user=request.user, data=request.POST)
         if form.is_valid():
             to_address = form.cleaned_data['address']
             amount = int(form.cleaned_data['amount'] * num_suffix)

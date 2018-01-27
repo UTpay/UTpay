@@ -6,7 +6,7 @@ import json
 
 from accounts.models import EthAccount
 
-class SendForm(forms.Form):
+class TransferForm(forms.Form):
     address = forms.CharField(
         label='宛先',
         max_length=42,
@@ -35,7 +35,7 @@ class SendForm(forms.Form):
 
     def __init__(self, user, data=None, initial=None):
         self.user = user
-        super(SendForm, self).__init__(data=data, initial=initial)
+        super(TransferForm, self).__init__(data=data, initial=initial)
 
     def clean_password(self):
         password = self.cleaned_data.get('password', None)
