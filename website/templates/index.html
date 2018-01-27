@@ -3,5 +3,28 @@
 {% block title %}UTpay{% endblock %}
 
 {% block content %}
-<p>Welcome to UTpay!</p>
+{% if user.is_authenticated %}
+<p>Hello @{{ user.username }} !</p>
+<p><a href="{% url 'accounts:contract' %}">Contract</a></p>
+
+{% else %}
+<div id="welcome-card" class="mdl-card mdl-shadow--2dp">
+  <div class="mdl-card__title">
+    <h2 class="mdl-card__title-text">Welcome to UTpay!</h2>
+  </div>
+  <div class="mdl-card__supporting-text">
+    <p><b>UTpay は 東大コイン(UTCoin) を用いたスマートペイメントサービスです。</b></p>
+    <p>
+      現在、東京大学関係者のみが利用できます。<br>
+      サインアップには "u-tokyo.ac.jp" を含むメールアドレスが必要です。
+    </p>
+    <br>
+    <p><b>はじめての方はこちらからサインアップしてください。<b></p>
+    <a href="{% url 'accounts:signup' %}"><button class="button-wide mdl-button mdl-js-button mdl-button--raised mdl-button--accent">サインアップ</button></a>
+    <br><br><br><br>
+    <p>アカウントをお持ちの方はこちらからログインしてください。</p>
+    <a href="{% url 'accounts:login' %}"><button class="button-wide mdl-button mdl-js-button mdl-button--raised mdl-button--colored">ログイン</button></a>
+  </div>
+</div>
+{% endif %}
 {% endblock %}

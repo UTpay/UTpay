@@ -1,0 +1,32 @@
+body {
+  background-color: #FAFAFA;
+}
+
+.mdl-layout__content {
+  padding: 1rem;
+}
+
+.mdl-card {
+  width: 100%;
+}
+
+.mdl-textfield {
+  width: 100%;
+}
+
+.button-wide.mdl-button {
+  width: 90%;
+}
+
+.mdl-card__supporting-text {
+  color: #000000;
+}
+
+#welcome-card .mdl-card__title {
+  margin: 0 auto;
+}
+
+#welcome-card .mdl-card__supporting-text {
+  text-align: center;
+  width: auto;
+}
