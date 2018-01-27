@@ -22,6 +22,11 @@ body {
   color: #000000;
 }
 
+.form-error {
+  color: red;
+  margin-bottom: 8px;
+}
+
 #welcome-card .mdl-card__title {
   margin: 0 auto;
 }
