@@ -10,84 +10,18 @@
   <div class="mdl-card__supporting-text">
     <form method="post">
       {% csrf_token %}
-
-      <!-- username -->
+      {% for field in form %}
       <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <input type="text" name="username" class="mdl-textfield__input" id="id_username" maxlength="254" required autofocus>
-        <label class="mdl-textfield__label" for="id_username">{{ form.username.label }}</label>
-        {% for error in form.username.errors %}
+        {{ field }}
+        <label class="mdl-textfield__label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {% for error in field.errors %}
         <span class="mdl-textfield__error">{{ error }}</p>
         {% endfor %}
       </div>
-      {% if form.username.help_text %}
-      <small style="color:grey">{{ form.username.help_text }}</small>
+      {% if field.help_text %}
+      <small style="color:grey">{{ field.help_text }}</small>
       {% endif %}
-
-      <!-- first_name -->
-      <br>
-      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <input type="text" name="first_name" class="mdl-textfield__input" id="id_first_name" maxlength="30" required>
-        <label class="mdl-textfield__label" for="id_first_name">{{ form.first_name.label }}</label>
-        {% for error in form.first_name.errors %}
-        <span class="mdl-textfield__error">{{ error }}</p>
-        {% endfor %}
-      </div>
-      {% if form.first_name.help_text %}
-      <small style="color:grey">{{ form.first_name.help_text }}</small>
-      {% endif %}
-
-      <!-- last_name -->
-      <br>
-      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <input type="text" name="last_name" class="mdl-textfield__input" id="id_last_name" maxlength="30" required>
-        <label class="mdl-textfield__label" for="id_last_name">{{ form.last_name.label }}</label>
-        {% for error in form.last_name.errors %}
-        <span class="mdl-textfield__error">{{ error }}</p>
-        {% endfor %}
-      </div>
-      {% if form.last_name.help_text %}
-      <small style="color:grey">{{ form.last_name.help_text }}</small>
-      {% endif %}
-
-      <!-- email -->
-      <br>
-      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <input type="email" name="email" class="mdl-textfield__input" id="id_email" maxlength="254" required>
-        <label class="mdl-textfield__label" for="id_email">{{ form.email.label }}</label>
-        {% for error in form.email.errors %}
-        <span class="mdl-textfield__error">{{ error }}</p>
-        {% endfor %}
-      </div>
-      {% if form.email.help_text %}
-      <small style="color:grey">{{ form.email.help_text }}</small>
-      {% endif %}
-
-      <!-- password1 -->
-      <br>
-      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <input type="password" name="password1" class="mdl-textfield__input" id="id_password1" required>
-        <label class="mdl-textfield__label" for="id_password1">{{ form.password1.label }}</label>
-        {% for error in form.password1.errors %}
-        <span class="mdl-textfield__error">{{ error }}</p>
-        {% endfor %}
-      </div>
-      {% if form.password1.help_text %}
-      <small style="color:grey">{{ form.password1.help_text }}</small>
-      {% endif %}
-
-      <!-- password2 -->
-      <br>
-      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <input type="password" name="password2" class="mdl-textfield__input" id="id_password2" required>
-        <label class="mdl-textfield__label" for="id_password2">{{ form.password2.label }}</label>
-        {% for error in form.password2.errors %}
-        <span class="mdl-textfield__error">{{ error }}</p>
-        {% endfor %}
-      </div>
-      {% if form.password2.help_text %}
-      <small style="color:grey">{{ form.password2.help_text }}</small>
-      {% endif %}
-
+      {% endfor %}
       <br><br>
       <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">サインアップ</button>
     </form>
