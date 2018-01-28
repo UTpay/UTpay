@@ -3,35 +3,60 @@
 {% block title %}{{ title }} - UTpay{% endblock %}
 
 {% block content %}
-  <h2>{{ contract.name }}</h2>
-
-  <div class="address">
-    <p>{{ contract.address }}</p>
-    <img src="{{ contract.qrcode.url }}" alt="{{ contract.address }}">
+<div id="contract-detail" class="mdl-card mdl-shadow--2dp">
+  <div class="mdl-card__title">
+    <h2 class="mdl-card__title-text">{{ contract.name }}</h2>
   </div>
+  <div class="mdl-card__supporting-text">
+    <div class="qrcode">
+      <img src="{{ contract.qrcode.url }}" alt="{{ contract.address }}">
+    </div>
 
-  <div class="description">
-    <h3>説明</h3>
-    <p>{{ contract.description }}</p>
-  </div>
+    <div class="address">
+      <h3>アドレス</h3>
+      <p><b>{{ contract.address }}</b></p>
+    </div>
 
-  <div class="code">
-    <h3>ソースコード</h3>
-    <pre>{{ contract.code }}</pre>
-  </div>
+    <div class="description">
+      <h3>説明</h3>
+      <p>{{ contract.description }}</p>
+    </div>
 
-  <div class="created_at">
-    <h3>作成日時</h3>
-    <p>{{ contract.created_at }}</p>
-  </div>
+    <div class="code">
+      <h3>ソースコード</h3>
+      <pre>{{ contract.code }}</pre>
+    </div>
 
-  <div class="modified_at">
-    <h3>変更日時</h3>
-    <p>{{ contract.modified_at }}</p>
-  </div>
+    <div class="created_at">
+      <h3>作成日時</h3>
+      <p>{{ contract.created_at }}</p>
+    </div>
 
-  <div class="verified_at">
-    <h3>認証日時</h3>
-    <p>{{ contract.verified_at }}</p>
+    <div class="modified_at">
+      <h3>変更日時</h3>
+      <p>{{ contract.modified_at }}</p>
+    </div>
+
+    <div class="verified_at">
+      <h3>認証日時</h3>
+      <p>{{ contract.verified_at }}</p>
+    </div>
   </div>
+  <div class="mdl-card__actions mdl-card--border">
+    <a href={% url 'accounts:contract_detail' contract.address %} class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">停止する</a>
+  </div>
+</div>
+
+<br>
+<div class="mdl-card mdl-shadow--2dp">
+  <div class="mdl-card__title">
+    <h2 class="mdl-card__title-text">統計情報</h2>
+  </div>
+  <div class="mdl-card__supporting-text">
+    <p>実行回数: 2回</p>
+  </div>
+  <div class="mdl-card__actions mdl-card--border">
+    <a href={% url 'accounts:contract_detail' contract.address %} class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">ログを確認する</a>
+  </div>
+</div>
 {% endblock %}

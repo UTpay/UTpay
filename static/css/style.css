@@ -8,6 +8,7 @@ body {
 
 .mdl-card {
   width: 100%;
+  min-height: 100px;
 }
 
 .mdl-textfield {
@@ -34,4 +35,14 @@ body {
 #welcome-card .mdl-card__supporting-text {
   text-align: center;
   width: auto;
+}
+
+#contract-detail h3 {
+  font-size: 24px;
+  margin-bottom: 12px;
+}
+
+.code pre {
+  background-color: #F6F8FA;
+  padding: 1rem;
 }
