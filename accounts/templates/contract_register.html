@@ -3,23 +3,30 @@
 {% block title %}{{ title }} - UTpay{% endblock %}
 
 {% block content %}
-  <h2>コントラクトを登録する</h2>
-  <form method="post">
-    {% csrf_token %}
-    {% for field in form %}
-      <p>
-        {{ field.label_tag }}<br>
+<div class="mdl-card mdl-shadow--2dp">
+  <div class="mdl-card__title">
+    <h2 class="mdl-card__title-text">コントラクトを登録する</h2>
+  </div>
+  <div class="mdl-card__supporting-text">
+    <form method="post">
+      {% csrf_token %}
+      {% for field in form %}
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
         {{ field }}
-        {% if field.help_text %}
-          <br>
-          <small style="color:grey">{{ field.help_text }}</small>
-        {% endif %}
-        {% for error in field.errors %}
-          <p style="color:red">{{ error }}</p>
-        {% endfor %}
-      </p>
-    {% endfor %}
-    <button type="submit">登録申請を行う</button>
-  </form>
-  <p>※ 一度登録を行うとソースコードを変更することはできません。</p>
+        <label class="mdl-textfield__label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+      </div>
+      {% for error in field.errors %}
+      <p class="form-error">{{ error }}</p>
+      {% endfor %}
+      {% if field.help_text %}
+      <small style="color:grey">{{ field.help_text }}</small>
+      {% endif %}
+      {% endfor %}
+      <br><br>
+      <p>※ 一度登録が行われるとソースコードを変更することはできません。</p>
+      <br>
+      <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">登録申請を行う</button>
+    </form>
+  </div>
+</div>
 {% endblock %}

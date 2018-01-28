@@ -51,6 +51,21 @@ class SignUpForm(UserCreationForm):
         fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2')
 
 class ContractForm(ModelForm):
+    name = forms.CharField(
+        label='名前',
+        widget=forms.TextInput(attrs={'class': 'mdl-textfield__input'}),
+    )
+    description = forms.CharField(
+        label='説明',
+        help_text='他の利用者に公開されます。',
+        widget=forms.Textarea(attrs={'class': 'mdl-textfield__input', 'rows': '3'}),
+    )
+    code = forms.CharField(
+        label='ソースコード',
+        help_text='変数 `tx_hash`, `from_address`, `to_address`, `amount`, `amount_fixed` を使用できます。',
+        widget=forms.Textarea(attrs={'class': 'mdl-textfield__input'}),
+    )
+
     class Meta:
         model = Contract
         fields = ['name', 'description', 'code']
