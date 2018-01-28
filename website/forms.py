@@ -11,7 +11,7 @@ class TransferForm(forms.Form):
         label='宛先',
         max_length=42,
         help_text='例) 0x...',
-        widget=forms.TextInput(attrs={'class': 'mdl-textfield__input', 'autofocus': 'autofocus'}),
+        widget=forms.TextInput(attrs={'class': 'mdl-textfield__input'}),
     )
     amount = forms.FloatField(
         label='金額 (UTC)',
