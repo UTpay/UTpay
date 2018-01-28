@@ -4,8 +4,36 @@
 
 {% block content %}
 {% if user.is_authenticated %}
-<p>Hello @{{ user.username }} !</p>
-<p><a href="{% url 'accounts:contract' %}">Contract</a></p>
+<div class="mdl-card mdl-shadow--2dp">
+  <div class="mdl-card__title">
+    <h2 class="mdl-card__title-text">送金する</h2>
+  </div>
+  <div class="mdl-card__supporting-text">
+    <p>
+      UTCoin を送金してみましょう。<br>
+      送金先のアドレスを入力するか、QRコードをスキャンすることで送金を行えます。
+    </p>
+  </div>
+  <div class="mdl-card__actions mdl-card--border">
+    <a href={% url 'website:transfer' %} class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">送金</a>
+  </div>
+</div>
+
+<br>
+<div class="mdl-card mdl-shadow--2dp">
+  <div class="mdl-card__title">
+    <h2 class="mdl-card__title-text">コントラクトを登録する</h2>
+  </div>
+  <div class="mdl-card__supporting-text">
+    <p>
+      UTCoin の送金をトリガーに実行するプログラムを登録することができます。<br>
+      外部の API を呼び出すことにより、簡単に UTCoin による決済を利用したサービスを開始できます。
+    </p>
+  </div>
+  <div class="mdl-card__actions mdl-card--border">
+    <a href={% url 'accounts:contract' %} class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">コントラクト</a>
+  </div>
+</div>
 
 {% else %}
 <div id="welcome-card" class="mdl-card mdl-shadow--2dp">
