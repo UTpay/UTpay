@@ -69,8 +69,10 @@ class ContractView(View):
     template_name = 'contract.html'
 
     def get(self, request):
+        contracts = Contract.objects.filter(user=request.user, is_banned=False)
         context = {
             'title': 'コントラクト',
+            'contracts': contracts,
         }
         return render(request, self.template_name, context)
 

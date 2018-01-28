@@ -3,7 +3,33 @@
 {% block title %}{{ title }} - UTpay{% endblock %}
 
 {% block content %}
-  <h2>コントラクト</h2>
-  <p>UTCoin が送金された時に実行するコントラクトを登録することができます。</p>
-  <p><a href="{% url 'accounts:contract_register' %}">コントラクトを登録する</a></p>
+<div class="mdl-card mdl-shadow--2dp">
+  <div class="mdl-card__title">
+    <h2 class="mdl-card__title-text">コントラクト</h2>
+  </div>
+  <div class="mdl-card__supporting-text">
+    <p>
+      UTCoin が送金された時に実行するコントラクトを登録することができます。<br>
+      登録申請を行うと審査が実施され、内容に問題が無ければ承認されます。
+    </p>
+  </div>
+  <div class="mdl-card__actions mdl-card--border">
+    <a href={% url 'accounts:contract_register' %} class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">コントラクトを登録する</a>
+  </div>
+</div>
+
+{% for contract in contracts %}
+<br>
+<div class="mdl-card mdl-shadow--2dp">
+  <div class="mdl-card__title">
+    <h2 class="mdl-card__title-text">{{ contract.name }}</h2>
+  </div>
+  <div class="mdl-card__supporting-text">
+    <p>{{ contract.description }}</p>
+  </div>
+  <div class="mdl-card__actions mdl-card--border">
+    <a href={% url 'accounts:contract_detail' contract.address %} class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">詳細を見る</a>
+  </div>
+</div>
+{% endfor %}
 {% endblock %}
