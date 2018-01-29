@@ -7,7 +7,7 @@ Smart payment service with UTCoin
 
 ## Requirements
 - Python 3.6 >=
-- Django 1.11 >=
+- Django 2.0 >=
 
 ## UTpay API
 Please read this [documentation](https://github.com/UTpay/UTpay/blob/master/api/README.md).
