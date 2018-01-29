@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 class Activate(models.Model):
     user = models.OneToOneField(User, on_delete=models.PROTECT)
-    key = models.CharField('Key', max_length=254, unique=True)
+    key = models.CharField('Key', max_length=191, unique=True)
     created_at = models.DateTimeField('作成日時', default=timezone.now)
 
 # Ethereum account
