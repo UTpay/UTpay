@@ -44,6 +44,8 @@ class SignUpForm(UserCreationForm):
         domain = email.split('@')[1]
         if 'u-tokyo.ac.jp' not in domain:
             raise forms.ValidationError('東京大学のドメイン(u-tokyo.ac.jp)が含まれていません。')
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError('既に登録されているメールアドレスです。')
         return email
 
     class Meta:
