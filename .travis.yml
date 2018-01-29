@@ -5,7 +5,6 @@ python:
 service: mysql
 install:
   - pip install -r requirements.txt
-  - pip install Django==$DJANGO_VERSION
   - pip install eth-testrpc
 before_script:
   - echo 'def transfer_callback(transaction):' > callback_functions/transfer_callback.py
