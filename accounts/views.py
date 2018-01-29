@@ -1,5 +1,6 @@
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.utils.decorators import method_decorator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
@@ -52,7 +53,9 @@ class SignUpView(View):
                     '[UTpay] Please verify your email',
                     f'@{user.username} さん\n\nこの度は、UTpay にご登録いただきありがとうございます。\n以下のURLにアクセスして、登録を確認してください。\n\n{activation_url}\n\n--\nUTpay <https://utpay.net>\ninfo@utpay.net'
                 )
-                # TODO: リダイレクト先にメッセージを表示
+
+            # リダイレクト先にメッセージを表示
+            messages.success(request, '登録確認メールを送信しました。')
 
             return redirect('website:index')
         else:
