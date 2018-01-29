@@ -8,8 +8,8 @@ UserAdmin.list_display = ('username', 'email', 'last_login', 'date_joined', 'is_
 UserAdmin.ordering = ('id',)
 
 class ActivateAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'key', 'created_at')
-    list_filter = ('user', 'created_at')
+    list_display = ('id', 'user', 'key', 'is_used', 'created_at')
+    list_filter = ('user', 'is_used', 'created_at')
     ordering = ('id',)
 
 class EthAccountAdmin(admin.ModelAdmin):
