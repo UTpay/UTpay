@@ -14,7 +14,6 @@ before_script:
   - echo 'def transfer_callback(transaction):' > callback_functions/transfer_callback.py
   - echo '    pass' >> callback_functions/transfer_callback.py
   - mysql -u root -e "CREATE DATABASE travis_ci CHARACTER SET utf8mb4"
-  - mysql -u root -e "set global innodb_large_prefix = ON"
   - testrpc-py &
 script:
   - python manage.py migrate
