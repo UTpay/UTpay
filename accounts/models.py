@@ -2,6 +2,10 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 
+class Activate(models.Model):
+    user = models.OneToOneField(User, on_delete=models.PROTECT)
+    key = models.CharField(max_length=255, unique=True)
+
 # Ethereum account
 class EthAccount(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT)
