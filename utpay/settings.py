@@ -138,6 +138,9 @@ MEDIA_URL = '/media/'
 # 認証バックエンドを変更
 AUTHENTICATION_BACKENDS = ['utpay.backends.EmailOrUsernameModelBackend']
 
+# メールをコンソール画面に表示する (debug)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 
 # Django REST Framework
 REST_FRAMEWORK = {
