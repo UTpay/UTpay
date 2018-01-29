@@ -83,6 +83,14 @@ class ActivationView(View):
             user.is_active = True
             user.save()
 
+        if activate.is_used == False:
+            # activate key に使用済みフラグを立てる
+            activate.is_used = True
+            activate.save()
+        else:
+            # 認証済みならトップにリダイレクト
+            return redirect('website:index')
+
         context = {
             'title': '本登録完了',
         }
