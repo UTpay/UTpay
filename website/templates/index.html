@@ -3,6 +3,23 @@
 {% block title %}UTpay{% endblock %}
 
 {% block content %}
+{% if messages %}
+{% for message in messages %}
+<div class="mdl-card mdl-shadow--2dp">
+  <div class="mdl-card__title">
+    {% if message.tags == 'success' %}
+    <h2 class="mdl-card__title-text"><i class="material-icons">check_circle</i> {{ message }}</h2>
+    {% elif message.tags == 'error' %}
+    <h2 class="mdl-card__title-text"><i class="material-icons">error</i> {{ message }}</h2>
+    {% else %}
+    <h2 class="mdl-card__title-text"><i class="material-icons">info</i> {{ message }}</h2>
+    {% endif %}
+  </div>
+</div>
+<br>
+{% endfor %}
+{% endif %}
+
 {% if user.is_authenticated %}
 <div class="mdl-card mdl-shadow--2dp">
   <div class="mdl-card__title">
