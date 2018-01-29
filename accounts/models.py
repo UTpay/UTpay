@@ -2,9 +2,11 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 
+# Activate key
 class Activate(models.Model):
     user = models.OneToOneField(User, on_delete=models.PROTECT)
     key = models.CharField('Key', max_length=191, unique=True)
+    is_used = models.BooleanField('使用済', default=False)
     created_at = models.DateTimeField('作成日時', default=timezone.now)
 
 # Ethereum account
