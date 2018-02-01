@@ -7,6 +7,11 @@ from .models import *
 UserAdmin.list_display = ('username', 'email', 'last_login', 'date_joined', 'is_active', 'is_staff')
 UserAdmin.ordering = ('id',)
 
+class ActivateAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'key', 'is_used', 'created_at')
+    list_filter = ('user', 'is_used', 'created_at')
+    ordering = ('id',)
+
 class EthAccountAdmin(admin.ModelAdmin):
     list_display = ('id', 'user', 'address', 'password', 'created_at', 'modified_at')
     list_filter = ('user', 'created_at', 'modified_at')
@@ -24,6 +29,7 @@ class ContractAdmin(admin.ModelAdmin):
 
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
+admin.site.register(Activate, ActivateAdmin)
 admin.site.register(EthAccount, EthAccountAdmin)
 admin.site.register(Transaction, TransactionAdmin)
 admin.site.register(Contract, ContractAdmin)

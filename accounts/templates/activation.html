@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }} - UTpay{% endblock %}
+
+{% block content %}
+<div class="mdl-card mdl-shadow--2dp">
+  <div class="mdl-card__title">
+    <h2 class="mdl-card__title-text">本登録完了</h2>
+  </div>
+  <div class="mdl-card__supporting-text">
+    <p>
+      メールアドレスが確認されました！<br>
+      以下のリンクからログイン画面に移動し、ログインを行ってください。<br>
+    </p>
+  </div>
+  <div class="mdl-card__actions mdl-card--border">
+    <a href={% url 'accounts:login' %} class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">ログイン</a>
+  </div>
+</div>
+{% endblock %}

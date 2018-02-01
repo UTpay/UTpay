@@ -1,10 +1,10 @@
-from django.conf.urls import url
+from django.urls import path
 
 from .views import *
 
 app_name = 'website'
 
 urlpatterns = [
-    url(r'^$', IndexView.as_view(), name='index'),
-    url(r'^transfer/$', TransferView.as_view(), name='transfer')
+    path('', IndexView.as_view(), name='index'),
+    path('transfer/', TransferView.as_view(), name='transfer')
 ]

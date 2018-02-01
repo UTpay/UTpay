@@ -2,13 +2,9 @@ language: python
 cache: pip
 python:
   - 3.6
-env:
-  - DJANGO_VERSION=1.11
-  - DJANGO_VERSION=2.0
 service: mysql
 install:
   - pip install -r requirements.txt
-  - pip install Django==$DJANGO_VERSION
   - pip install eth-testrpc
 before_script:
   - echo 'def transfer_callback(transaction):' > callback_functions/transfer_callback.py

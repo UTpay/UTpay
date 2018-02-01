@@ -135,8 +135,16 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 
+MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
+
+
+# Backends
+
 # 認証バックエンドを変更
 AUTHENTICATION_BACKENDS = ['utpay.backends.EmailOrUsernameModelBackend']
+
+# メールをコンソール画面に表示する (debug)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
 # Django REST Framework
