@@ -1,9 +1,11 @@
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.urls import reverse
 from rest_framework import serializers
 from web3 import Web3, HTTPProvider
 import secrets
 import string
+import uuid
 import qrcode
 
 from accounts.models import *
@@ -18,35 +20,96 @@ class DateTimeFieldAware(serializers.DateTimeField):
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
+    email = serializers.CharField(required=True)
 
     class Meta:
         model = User
         fields = ('id', 'username', 'email', 'password')
 
     def create(self, validated_data):
-        # Create User
-        user = User.objects.create_user(username=validated_data['username'], email=validated_data['email'], password=validated_data['password'])
+        # Create User (仮登録)
+        user = User.objects.create_user(username=validated_data['username'], email=validated_data['email'], password=validated_data['password'], is_active=False)
 
-        # Generate random password and address
-        web3 = Web3(HTTPProvider('http://localhost:8545'))
-        password = self.make_random_password(length=30)
-        address = web3.personal.newAccount(password)
+        # Create Activate
+        activate_key = self.create_activate_key()
+        activate = Activate(user=user, key=activate_key)
+        activate.save()
 
-        # Generate QR code
-        img = qrcode.make(address)
-        file_name = address + '.png'
-        file_path = '/images/qrcode/' + file_name
-        img.save(settings.MEDIA_ROOT + file_path)
+        # Create Account
+        ut_address = self.make_ut_address()
+        while Account.objects.filter(address=ut_address).exists():
+            ut_address = self.make_ut_address()
+        qrcode_path = self.make_qrcode(ut_address, file_dir='/images/qrcode/account/')
+        account = Account.objects.create(user=user, address=ut_address, qrcode=qrcode_path)
 
         # Create EthAccount
-        eth_account = EthAccount.objects.create(user=user, address=address, password=password, qrcode=file_path)
+        web3 = Web3(HTTPProvider('http://localhost:8545'))
+        password = self.make_random_password(length=30)
+        eth_address = web3.personal.newAccount(password)
+        qrcode_path = self.make_qrcode(eth_address, file_dir='/images/qrcode/eth_account/')
+        eth_account = EthAccount.objects.create(user=user, address=eth_address, password=password, qrcode=qrcode_path)
+
+        # Send activation email
+        # FIXME: 自動で `base_url` を取得したい
+        base_url = 'http://127.0.0.1:8000'
+        activation_url = base_url + reverse('accounts:activation', args=[activate_key])
+        user.email_user(
+            '[UTpay] Please verify your email',
+            f'@{user.username} さん\n\nこの度は、UTpay にご登録いただきありがとうございます。\n以下のURLにアクセスして、登録を確認してください。\n\n{activation_url}\n\n--\nUTpay <https://utpay.net>\ninfo@utpay.net'
+        )
 
         return user
 
+    def validate_email(self, email):
+        """
+        :param str email:
+        :return str: cleaned email
+        """
+        domain = email.split('@')[1]
+        if 'u-tokyo.ac.jp' not in domain:
+            raise serializers.ValidationError('東京大学のドメイン(u-tokyo.ac.jp)が含まれていません。')
+        if User.objects.filter(email=email).exists():
+            raise serializers.ValidationError('既に登録されているメールアドレスです。')
+        return email
+
+    def create_activate_key(self):
+        """
+        ランダムな文字列を生成
+        :return str: UUID
+        """
+        return uuid.uuid4().hex
+
+    def make_ut_address(self):
+        """
+        ランダムな42文字のUTアドレスを生成 (bitcoin base58)
+        :return str: address
+        """
+        base58_alphabet = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
+        address = 'UT' + ''.join(secrets.choice(base58_alphabet) for _ in range(40))
+        return address
+
     def make_random_password(self, length):
+        """
+        ランダムなパスワードを生成
+        :param int length: パスワードの文字数
+        :return str: password
+        """
         alphabet = string.ascii_letters + string.digits
         password = ''.join(secrets.choice(alphabet) for _ in range(length))
         return password
+
+    def make_qrcode(self, address, file_dir):
+        """
+        QRコードを生成
+        :param str address:
+        :param str file_dir:
+        :return str: file path
+        """
+        img = qrcode.make(address)
+        file_name = address + '.png'
+        file_path = file_dir + file_name
+        img.save(settings.MEDIA_ROOT + file_path)
+        return file_path
 
 class EthAccountSerializer(serializers.ModelSerializer):
     user = UserSerializer()
