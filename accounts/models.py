@@ -12,8 +12,8 @@ class Activate(models.Model):
 # UTpay account
 class Account(models.Model):
     user = models.OneToOneField(User, on_delete=models.PROTECT)
-    address = models.CharField('アドレス', max_length=42, unique=True, help_text='ut...')
-    balance = models.BigIntegerField('残高', help_text='UTC (int)')
+    address = models.CharField('アドレス', max_length=42, unique=True, help_text='UT... (42文字)')
+    balance = models.BigIntegerField('残高', help_text='UTC (int)', default=0)
     qrcode = models.ImageField('QR code', upload_to='images/qrcode/account/', null=True, blank=True)
     created_at = models.DateTimeField('作成日時', default=timezone.now)
     modified_at = models.DateTimeField('変更日時', default=timezone.now)
@@ -28,7 +28,7 @@ class Account(models.Model):
 # Ethereum account
 class EthAccount(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT)
-    address = models.CharField('アドレス', max_length=42, unique=True, help_text='0x...')
+    address = models.CharField('アドレス', max_length=42, unique=True, help_text='0x... (42文字)')
     password = models.CharField('パスワード', max_length=30)
     qrcode = models.ImageField('QR code', upload_to='images/qrcode/eth_account/', null=True, blank=True)
     created_at = models.DateTimeField('作成日時', default=timezone.now)
