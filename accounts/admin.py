@@ -12,9 +12,19 @@ class ActivateAdmin(admin.ModelAdmin):
     list_filter = ('user', 'is_used', 'created_at')
     ordering = ('id',)
 
+class AccountAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'address', 'balance', 'created_at', 'modified_at')
+    list_filter = ('user', 'balance', 'created_at', 'modified_at')
+    ordering = ('id',)
+
 class EthAccountAdmin(admin.ModelAdmin):
     list_display = ('id', 'user', 'address', 'password', 'created_at', 'modified_at')
     list_filter = ('user', 'created_at', 'modified_at')
+    ordering = ('id',)
+
+class OffChainTransactionAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'account', 'from_address', 'to_address', 'amount', 'is_active', 'created_at')
+    list_filter = ('user', 'account', 'from_address', 'to_address', 'amount', 'is_active', 'created_at')
     ordering = ('id',)
 
 class TransactionAdmin(admin.ModelAdmin):
@@ -30,6 +40,8 @@ class ContractAdmin(admin.ModelAdmin):
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 admin.site.register(Activate, ActivateAdmin)
+admin.site.register(Account, AccountAdmin)
 admin.site.register(EthAccount, EthAccountAdmin)
+admin.site.register(OffChainTransaction, OffChainTransactionAdmin)
 admin.site.register(Transaction, TransactionAdmin)
 admin.site.register(Contract, ContractAdmin)
