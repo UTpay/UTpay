@@ -23,7 +23,7 @@ pycryptodome==3.4.11
 PyJWT==1.5.3
 pylru==1.0.9
 pysha3==1.0.2
-pytz==2017.3
+pytz==2018.3
 qrcode==5.3
 requests==2.18.4
 rlp==0.6.0
