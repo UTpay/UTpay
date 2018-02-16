@@ -173,15 +173,18 @@ JWT_AUTH = {
 CORS_ORIGIN_ALLOW_ALL = True
 
 
+# Ethereum
+
+# web3 provider
+# WEB3_PROVIDER = 'http://localhost:8545' # Ropsten
+WEB3_PROVIDER = 'http://localhost:9545' # Truffle
+
 # Contract settings
+ARTIFACT_PATH = 'static/contracts/UTCoin.json'
 
-# Mainnet
-# ARTIFACT_PATH = 'static/contracts/mainnet/UTCoin.json'
-# UTCOIN_ADDRESS = ''
-
-# Ropsten
-ARTIFACT_PATH = 'static/contracts/ropsten/UTCoin.json'
-UTCOIN_ADDRESS = '0x7a58dc29bd83745656fe4dda96f0ed7192d35bf4'
+# UTCOIN_ADDRESS = '' # Mainnet
+# UTCOIN_ADDRESS = '0xb899ca31b7008c16e7779d399dc1c42c2bae75fc' # Ropsten
+UTCOIN_ADDRESS = '0x345ca3e014aaf5dca488057592ee47305d9b3e10' # Truffle
 
 
 # Load all local settings
