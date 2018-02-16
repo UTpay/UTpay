@@ -50,7 +50,7 @@ class SignUpView(View):
                 account = Account.objects.create(user=user, address=ut_address, qrcode=qrcode_path)
 
                 # Create EthAccount
-                web3 = Web3(HTTPProvider('http://localhost:8545'))
+                web3 = Web3(HTTPProvider(settings.WEB3_PROVIDER))
                 password = self.make_random_password(length=30)
                 eth_address = web3.personal.newAccount(password)
                 qrcode_path = self.make_qrcode(eth_address, file_dir='/images/qrcode/eth_account/')

@@ -52,7 +52,7 @@ class EthAccountViewSet(viewsets.ReadOnlyModelViewSet):
 
         # Get UTCoin balance
         num_suffix = 1000
-        web3 = Web3(HTTPProvider('http://localhost:8545'))
+        web3 = Web3(HTTPProvider(settings.WEB3_PROVIDER))
         eth_balance = web3.fromWei(web3.eth.getBalance(address), 'ether')
         abi = self.load_abi(settings.ARTIFACT_PATH)
         UTCoin = web3.eth.contract(abi=abi, address=settings.UTCOIN_ADDRESS)
@@ -133,7 +133,7 @@ class TransactionViewSet(viewsets.ReadOnlyModelViewSet):
         amount_int = int(amount * num_suffix)
 
         # Validate address
-        web3 = Web3(HTTPProvider('http://localhost:8545'))
+        web3 = Web3(HTTPProvider(settings.WEB3_PROVIDER))
         if not web3.isAddress(to_address):
             error_msg = '無効なアドレスです。'
             print('Error:', error_msg)

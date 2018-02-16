@@ -4,7 +4,7 @@ from django.conf import settings
 from web3 import Web3, HTTPProvider
 import json
 
-from accounts.models import EthAccount
+from accounts.models import Account, EthAccount
 
 class TransferForm(forms.Form):
     address = forms.CharField(
@@ -44,17 +44,17 @@ class TransferForm(forms.Form):
         return password
 
     def clean_address(self):
-        web3 = Web3(HTTPProvider('http://localhost:8545'))
+        web3 = Web3(HTTPProvider(settings.WEB3_PROVIDER))
         address = self.cleaned_data.get('address', None)
-        if not web3.isAddress(address):
-            raise ValidationError('正しいアドレスを入力してください。')
-        return address
+        if web3.isAddress(address) or self.is_ut_address(address):
+            return address
+        raise ValidationError('正しいアドレスを入力してください。')
 
     def clean_amount(self):
         eth_account = EthAccount.objects.get(user=self.user)
 
         # Get UTCoin balance
-        web3 = Web3(HTTPProvider('http://localhost:8545'))
+        web3 = Web3(HTTPProvider(settings.WEB3_PROVIDER))
         abi = self.load_abi(settings.ARTIFACT_PATH)
         UTCoin = web3.eth.contract(abi=abi, address=settings.UTCOIN_ADDRESS)
         balance = UTCoin.call().balanceOf(eth_account.address)
@@ -65,7 +65,21 @@ class TransferForm(forms.Form):
         return amount
 
     def load_abi(self, file_path):
+        """
+        :param str file_path:
+        :return dict: abi
+        """
         artifact = open(file_path, 'r')
         json_dict = json.load(artifact)
         abi = json_dict['abi']
         return abi
+
+    def is_ut_address(self, address):
+        """
+        :param str address:
+        :return bool:
+        """
+        if address[0:2] == 'UT' and len(address) == '42':
+            if Account.objects.filter(address=address).exists():
+                return True
+        return False

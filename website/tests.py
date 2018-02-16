@@ -6,7 +6,7 @@ import json
 class TestTotalSupply(TestCase):
     def __init__(self, *args, **kwargs):
         super(TestTotalSupply, self).__init__(*args, **kwargs)
-        web3 = Web3(HTTPProvider('http://localhost:8545'))
+        web3 = Web3(HTTPProvider(settings.WEB3_PROVIDER))
         coinbase = web3.eth.coinbase
 
         # Parse artifact
@@ -29,7 +29,7 @@ class TestTotalSupply(TestCase):
 class TestBalanceOf(TestCase):
     def __init__(self, *args, **kwargs):
         super(TestBalanceOf, self).__init__(*args, **kwargs)
-        web3 = Web3(HTTPProvider('http://localhost:8545'))
+        web3 = Web3(HTTPProvider(settings.WEB3_PROVIDER))
         accounts = web3.eth.accounts
 
         # Parse artifact
@@ -54,7 +54,7 @@ class TestBalanceOf(TestCase):
 class TestTransfer(TestCase):
     def __init__(self, *args, **kwargs):
         super(TestTransfer, self).__init__(*args, **kwargs)
-        web3 = Web3(HTTPProvider('http://localhost:8545'))
+        web3 = Web3(HTTPProvider(settings.WEB3_PROVIDER))
         accounts = web3.eth.accounts
 
         # Parse artifact

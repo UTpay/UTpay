@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
+from django.conf import settings
 from web3 import Web3, HTTPProvider
 import secrets
 import string
@@ -17,7 +18,7 @@ class UserModelTests(TestCase):
         user = User.objects.create_user(username=username, email=email, password=password)
 
         # Generate random password and address
-        web3 = Web3(HTTPProvider('http://localhost:8545'))
+        web3 = Web3(HTTPProvider(settings.WEB3_PROVIDER))
         alphabet = string.ascii_letters + string.digits
         password = ''.join(secrets.choice(alphabet) for _ in range(30))
         address = web3.personal.newAccount(password)
