@@ -1,6 +1,5 @@
 from django.shortcuts import render, get_object_or_404
 from django.conf import settings
-from django.core.files import File
 from django.contrib.auth.models import User
 from django.db import transaction
 from django.db.models import Q

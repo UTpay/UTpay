@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.utils.decorators import method_decorator
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 from django.views import View
 from django.views.generic import TemplateView
 from django.conf import settings
