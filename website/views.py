@@ -4,12 +4,13 @@ from django.shortcuts import render, get_object_or_404
 from django.views import View
 from django.views.generic import TemplateView
 from django.conf import settings
+from django.db import transaction
 from web3 import Web3, HTTPProvider
 from decimal import *
 import json
 
 from .models import *
-from accounts.models import EthAccount, Transaction
+from accounts.models import EthAccount, OffChainTransaction, Transaction
 from .forms import *
 
 class IndexView(TemplateView):
@@ -20,17 +21,7 @@ class TransferView(View):
     template_name = 'transfer.html'
 
     def get(self, request):
-        account = request.user.account
-
-        # TODO: Set fee
-        fee = '0'
-
-        # 残高確認 (送金可能額)
-        balance = account.balance
-        if balance < 0:
-            balance = 0
-
-        form = TransferForm(user=request.user, initial={'fee': fee, 'balance': balance})
+        form = self.init_form()
 
         context = {
             'title': 'コインを送る',
@@ -39,44 +30,75 @@ class TransferView(View):
         return render(request, self.template_name, context)
 
     def post(self, request):
-        eth_account = get_object_or_404(EthAccount, user=request.user)
-        from_address = eth_account.address
-        num_suffix = 1000
-
         form = TransferForm(user=request.user, data=request.POST)
         if form.is_valid():
             to_address = form.cleaned_data['address']
-            amount = int(form.cleaned_data['amount'] * num_suffix)
+            if self.is_ut_address(to_address):
+                # UT address -> UT address
+                from_account = request.user.account
+                to_account = Account.objects.get(address=to_address)
+                amount = Decimal(form.cleaned_data['amount'])
 
-            # TODO: Set fee
-            fee = '0'
+                # UTCoin 送金
+                with transaction.atomic():
+                    from_account.balance -= amount
+                    to_account.balance += amount
+                    from_account.save()
+                    to_account.save()
 
-            # Transfer UTCoin
-            web3 = Web3(HTTPProvider(settings.WEB3_PROVIDER))
-            abi = self.load_abi(settings.ARTIFACT_PATH)
-            UTCoin = web3.eth.contract(abi=abi, address=settings.UTCOIN_ADDRESS)
-            if web3.personal.unlockAccount(from_address, eth_account.password, duration=hex(300)):
-                try:
-                    tx_hash = UTCoin.transact({'from': from_address}).transfer(to_address, amount)
-
-                    # Create Transaction
-                    transaction_info = web3.eth.getTransaction(tx_hash)
-                    transaction = Transaction.objects.create(
+                    # Create OffChainTransaction
+                    off_chain_transaction = OffChainTransaction.objects.create(
                         user=request.user,
-                        eth_account=eth_account,
-                        tx_hash=tx_hash,
-                        from_address=from_address,
+                        account=from_account,
+                        from_address=from_account.address,
                         to_address=to_address,
-                        amount=amount,
-                        gas=transaction_info['gas'],
-                        gas_price=transaction_info['gasPrice'],
-                        value=transaction_info['value'],
-                        network_id=transaction_info['networkId']
+                        amount=amount
                     )
-                except Exception as e:
-                    print(e)
+
             else:
-                print('failed to unlock account')
+                # UT address -> ETH address
+                from_account = request.user.account
+                # TODO: admin eth account
+                eth_account = request.user.ethaccount
+                from_address = eth_account.address
+                amount = int(form.cleaned_data['amount'])
+                num_suffix = 1000
+                fee = 0
+
+                # UTCoin 送金
+                web3 = Web3(HTTPProvider(settings.WEB3_PROVIDER))
+                abi = self.load_abi(settings.ARTIFACT_PATH)
+                UTCoin = web3.eth.contract(abi=abi, address=settings.UTCOIN_ADDRESS)
+                if web3.personal.unlockAccount(from_address, eth_account.password, duration=hex(60)):
+                    try:
+                        tx_hash = UTCoin.transact({'from': from_address}).transfer(to_address, amount + fee)
+
+                        with transaction.atomic():
+                            from_account.balance -= amount
+                            from_account.save()
+
+                            # Create Transaction
+                            tx_info = web3.eth.getTransaction(tx_hash)
+                            tx = Transaction.objects.create(
+                                user=request.user,
+                                eth_account=eth_account,
+                                tx_hash=tx_hash,
+                                from_address=from_address,
+                                to_address=to_address,
+                                amount=amount,
+                                gas=tx_info['gas'],
+                                gas_price=tx_info['gasPrice'],
+                                value=tx_info['value'],
+                                network_id=tx_info['networkId']
+                        )
+                    except Exception as e:
+                        print(e)
+
+                else:
+                    print('failed to unlock account')
+
+            # フォーム初期化 (送金可能額を再計算)
+            form = self.init_form()
 
         context = {
             'title': 'コインを送る',
@@ -84,7 +106,37 @@ class TransferView(View):
         }
         return render(request, self.template_name, context)
 
+    def init_form(self, fee=0):
+        """
+        :param int fee:
+        :return class 'website.forms.TransferForm':
+        """
+        account = self.request.user.account
+        fee = str(fee)
+
+        # 送金可能額を計算
+        balance = account.balance - Decimal(fee)
+        if balance < 0:
+            balance = 0
+
+        form = TransferForm(user=self.request.user, initial={'fee': fee, 'balance': balance})
+        return form
+
+    def is_ut_address(self, address):
+        """
+        :param str address:
+        :return bool:
+        """
+        if address[0:2] == 'UT' and len(address) == 42:
+            if Account.objects.filter(address=address).exists():
+                return True
+        return False
+
     def load_abi(self, file_path):
+        """
+        :param str file_path:
+        :return dict: abi
+        """
         artifact = open(file_path, 'r')
         json_dict = json.load(artifact)
         abi = json_dict['abi']
