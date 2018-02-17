@@ -13,7 +13,7 @@ class Activate(models.Model):
 class Account(models.Model):
     user = models.OneToOneField(User, on_delete=models.PROTECT)
     address = models.CharField('アドレス', max_length=42, unique=True, help_text='UT... (42文字)')
-    balance = models.DecimalField('残高', max_digits=10, decimal_places=3, help_text='UTC', default=0)
+    balance = models.DecimalField('残高', max_digits=12, decimal_places=3, help_text='UTC', default=0)
     qrcode = models.ImageField('QR code', upload_to='images/qrcode/account/', null=True, blank=True)
     created_at = models.DateTimeField('作成日時', default=timezone.now)
     modified_at = models.DateTimeField('変更日時', default=timezone.now)
@@ -47,7 +47,7 @@ class OffChainTransaction(models.Model):
     account = models.ForeignKey(Account, on_delete=models.PROTECT)
     from_address = models.CharField('From', max_length=42)
     to_address = models.CharField('To', max_length=42)
-    amount = models.BigIntegerField('Amount', help_text='UTC (int)')
+    amount = models.DecimalField('Amount', max_digits=12, decimal_places=3, help_text='UTC')
     is_active = models.BooleanField('有効', default=True)
     created_at = models.DateTimeField('作成日時', default=timezone.now)
 
