@@ -9,6 +9,9 @@ class Activate(models.Model):
     is_used = models.BooleanField('使用済', default=False)
     created_at = models.DateTimeField('作成日時', default=timezone.now)
 
+    def __str__(self):
+        return self.key
+
 # UTpay account
 class Account(models.Model):
     user = models.OneToOneField(User, on_delete=models.PROTECT)
@@ -20,10 +23,6 @@ class Account(models.Model):
 
     def __str__(self):
         return self.address
-
-    class Meta:
-        verbose_name = 'Account'
-        verbose_name_plural = 'Accounts'
 
 # Ethereum account
 class EthAccount(models.Model):
@@ -37,10 +36,6 @@ class EthAccount(models.Model):
     def __str__(self):
         return self.address
 
-    class Meta:
-        verbose_name = 'ETH Account'
-        verbose_name_plural = 'ETH Accounts'
-
 # Off-Chain Transaction information (internal)
 class OffChainTransaction(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT)
@@ -52,11 +47,7 @@ class OffChainTransaction(models.Model):
     created_at = models.DateTimeField('作成日時', default=timezone.now)
 
     def __str__(self):
-        return self.id
-
-    class Meta:
-        verbose_name = 'Off-Chain Transaction'
-        verbose_name_plural = 'Off-Chain Transactions'
+        return str(self.id)
 
 # On-Chain Transaction information (external)
 class Transaction(models.Model):
@@ -76,10 +67,6 @@ class Transaction(models.Model):
     def __str__(self):
         return self.tx_hash
 
-    class Meta:
-        verbose_name = 'Transaction'
-        verbose_name_plural = 'Transactions'
-
 # User defined function
 class Contract(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT)
@@ -98,7 +85,3 @@ class Contract(models.Model):
 
     def __str__(self):
         return self.name
-
-    class Meta:
-        verbose_name = 'Contract'
-        verbose_name_plural = 'Contracts'
