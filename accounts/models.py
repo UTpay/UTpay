@@ -26,7 +26,7 @@ class Account(models.Model):
 
 # Ethereum account
 class EthAccount(models.Model):
-    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    user = models.OneToOneField(User, on_delete=models.PROTECT)
     address = models.CharField('アドレス', max_length=42, unique=True, help_text='0x... (42文字)')
     password = models.CharField('パスワード', max_length=30)
     qrcode = models.ImageField('QR code', upload_to='images/qrcode/eth_account/', null=True, blank=True)
