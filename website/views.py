@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.utils.decorators import method_decorator
 from django.shortcuts import render, get_object_or_404
 from django.views import View
@@ -57,21 +58,20 @@ class TransferView(View):
 
             else:
                 # UT address -> ETH address
-                from_account = request.user.account
-                # TODO: admin eth account
-                eth_account = request.user.ethaccount
-                from_address = eth_account.address
-                amount = int(form.cleaned_data['amount'])
                 num_suffix = 1000
+                from_account = request.user.account
+                admin = User.objects.get(pk=1)
+                admin_eth_account = admin.ethaccount
+                amount = int(form.cleaned_data['amount'] * num_suffix)
                 fee = 0
 
                 # UTCoin 送金
                 web3 = Web3(HTTPProvider(settings.WEB3_PROVIDER))
                 abi = self.load_abi(settings.ARTIFACT_PATH)
                 UTCoin = web3.eth.contract(abi=abi, address=settings.UTCOIN_ADDRESS)
-                if web3.personal.unlockAccount(from_address, eth_account.password, duration=hex(60)):
+                if web3.personal.unlockAccount(admin_eth_account.address, admin_eth_account.password, duration=hex(60)):
                     try:
-                        tx_hash = UTCoin.transact({'from': from_address}).transfer(to_address, amount + fee)
+                        tx_hash = UTCoin.transact({'from': admin_eth_account.address}).transfer(to_address, amount - fee)
 
                         with transaction.atomic():
                             from_account.balance -= amount
@@ -81,9 +81,9 @@ class TransferView(View):
                             tx_info = web3.eth.getTransaction(tx_hash)
                             tx = Transaction.objects.create(
                                 user=request.user,
-                                eth_account=eth_account,
+                                eth_account=admin_eth_account,
                                 tx_hash=tx_hash,
-                                from_address=from_address,
+                                from_address=admin_eth_account.address,
                                 to_address=to_address,
                                 amount=amount,
                                 gas=tx_info['gas'],
