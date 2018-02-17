@@ -19,7 +19,7 @@ class Account(models.Model):
     balance = models.DecimalField('残高', max_digits=12, decimal_places=3, help_text='UTC', default=0)
     qrcode = models.ImageField('QR code', upload_to='images/qrcode/account/', null=True, blank=True)
     created_at = models.DateTimeField('作成日時', default=timezone.now)
-    modified_at = models.DateTimeField('変更日時', default=timezone.now)
+    modified_at = models.DateTimeField('変更日時', auto_now=True)
 
     def __str__(self):
         return self.address
@@ -31,7 +31,7 @@ class EthAccount(models.Model):
     password = models.CharField('パスワード', max_length=30)
     qrcode = models.ImageField('QR code', upload_to='images/qrcode/eth_account/', null=True, blank=True)
     created_at = models.DateTimeField('作成日時', default=timezone.now)
-    modified_at = models.DateTimeField('変更日時', default=timezone.now)
+    modified_at = models.DateTimeField('変更日時', auto_now=True)
 
     def __str__(self):
         return self.address
@@ -81,7 +81,7 @@ class Contract(models.Model):
     is_banned = models.BooleanField('禁止', default=False)
     verified_at = models.DateTimeField('認証日時', null=True, blank=True)
     created_at = models.DateTimeField('作成日時', default=timezone.now)
-    modified_at = models.DateTimeField('変更日時', default=timezone.now)
+    modified_at = models.DateTimeField('変更日時', auto_now=True)
 
     def __str__(self):
         return self.name
