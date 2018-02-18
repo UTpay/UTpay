@@ -89,6 +89,10 @@ class EthAccountViewSet(viewsets.ReadOnlyModelViewSet):
         return Response(context)
 
     def load_abi(self, file_path):
+        """
+        :param str file_path:
+        :return dict: abi
+        """
         artifact = open(file_path, 'r')
         json_dict = json.load(artifact)
         abi = json_dict['abi']
@@ -222,6 +226,10 @@ class TransactionViewSet(viewsets.ReadOnlyModelViewSet):
         return Response(context, status=status.HTTP_201_CREATED)
 
     def load_abi(self, file_path):
+        """
+        :param str file_path:
+        :return dict: abi
+        """
         artifact = open(file_path, 'r')
         json_dict = json.load(artifact)
         abi = json_dict['abi']
