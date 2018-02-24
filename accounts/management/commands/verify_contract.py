@@ -4,6 +4,7 @@ import sys
 
 from accounts.models import Contract
 
+
 class Command(BaseCommand):
     help = 'Verify the contract.'
 

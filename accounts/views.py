@@ -15,6 +15,7 @@ import qrcode
 from .models import *
 from .forms import *
 
+
 class SignUpView(View):
     template_name = 'signup.html'
 
@@ -46,14 +47,14 @@ class SignUpView(View):
                 while Account.objects.filter(address=ut_address).exists():
                     ut_address = self.make_ut_address()
                 qrcode_path = self.make_qrcode(ut_address, file_dir='/images/qrcode/account/')
-                account = Account.objects.create(user=user, address=ut_address, qrcode=qrcode_path)
+                Account.objects.create(user=user, address=ut_address, qrcode=qrcode_path)
 
                 # Create EthAccount
                 web3 = Web3(HTTPProvider(settings.WEB3_PROVIDER))
                 password = self.make_random_password(length=30)
                 eth_address = web3.personal.newAccount(password)
                 qrcode_path = self.make_qrcode(eth_address, file_dir='/images/qrcode/eth_account/')
-                eth_account = EthAccount.objects.create(user=user, address=eth_address, password=password, qrcode=qrcode_path)
+                EthAccount.objects.create(user=user, address=eth_address, password=password, qrcode=qrcode_path)
 
                 # Send activation email
                 base_url = '/'.join(request.build_absolute_uri().split('/')[:3])
@@ -74,14 +75,16 @@ class SignUpView(View):
             }
             return render(request, self.template_name, context)
 
-    def create_activate_key(self):
+    @staticmethod
+    def create_activate_key():
         """
         ランダムな文字列を生成
         :return str: UUID
         """
         return uuid.uuid4().hex
 
-    def make_ut_address(self):
+    @staticmethod
+    def make_ut_address():
         """
         ランダムな42文字のUTアドレスを生成 (bitcoin base58)
         :return str: address
@@ -90,7 +93,8 @@ class SignUpView(View):
         address = 'UT' + ''.join(secrets.choice(base58_alphabet) for _ in range(40))
         return address
 
-    def make_random_password(self, length):
+    @staticmethod
+    def make_random_password(length):
         """
         ランダムなパスワードを生成
         :param int length: パスワードの文字数
@@ -100,7 +104,8 @@ class SignUpView(View):
         password = ''.join(secrets.choice(alphabet) for _ in range(length))
         return password
 
-    def make_qrcode(self, address, file_dir):
+    @staticmethod
+    def make_qrcode(address, file_dir):
         """
         QRコードを生成
         :param str address:
@@ -113,6 +118,7 @@ class SignUpView(View):
         img.save(settings.MEDIA_ROOT + file_path)
         return file_path
 
+
 class ActivationView(View):
     template_name = 'activation.html'
 
@@ -121,11 +127,11 @@ class ActivationView(View):
         user = activate.user
 
         # アカウントを有効化
-        if user.is_active == False:
+        if not user.is_active:
             user.is_active = True
             user.save()
 
-        if activate.is_used == False:
+        if not activate.is_used:
             # activate key に使用済みフラグを立てる
             activate.is_used = True
             activate.save()
@@ -138,6 +144,7 @@ class ActivationView(View):
         }
         return render(request, self.template_name, context)
 
+
 @method_decorator(login_required, name='dispatch')
 class MyPageView(View):
     template_name = 'mypage.html'
@@ -147,6 +154,7 @@ class MyPageView(View):
             'title': 'マイページ',
         }
         return render(request, self.template_name, context)
+
 
 @method_decorator(login_required, name='dispatch')
 class ContractView(View):
@@ -160,6 +168,7 @@ class ContractView(View):
         }
         return render(request, self.template_name, context)
 
+
 @method_decorator(login_required, name='dispatch')
 class ContractRegisterView(View):
     template_name = 'contract_register.html'
@@ -171,6 +180,7 @@ class ContractRegisterView(View):
             'form': form,
         }
         return render(request, self.template_name, context)
+
 
 @method_decorator(login_required, name='dispatch')
 class ContractDetailView(View):

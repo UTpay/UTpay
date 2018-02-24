@@ -5,6 +5,7 @@ from django.forms import ModelForm
 
 from .models import Contract
 
+
 class SignUpForm(UserCreationForm):
     username = forms.CharField(
         max_length=150,
@@ -51,6 +52,7 @@ class SignUpForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2')
+
 
 class ContractForm(ModelForm):
     name = forms.CharField(

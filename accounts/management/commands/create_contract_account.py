@@ -10,6 +10,7 @@ import qrcode
 
 from accounts.models import Contract
 
+
 class Command(BaseCommand):
     help = 'Create Ethereum account for the contract.'
 

@@ -8,6 +8,7 @@ import qrcode
 
 from .models import EthAccount
 
+
 class UserModelTests(TestCase):
     def create_user(self):
         username = 'test'

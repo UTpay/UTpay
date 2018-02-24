@@ -14,6 +14,7 @@ import qrcode
 from .serializer import *
 from callback_functions.transfer_callback import transfer_callback
 
+
 class RegisterView(generics.CreateAPIView):
     """
     Create User
@@ -30,12 +31,14 @@ class RegisterView(generics.CreateAPIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = UserSerializer
 
     def get_queryset(self):
         return User.objects.filter(pk=self.request.user.id)
+
 
 class EthAccountViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (permissions.IsAuthenticated,)
@@ -88,7 +91,8 @@ class EthAccountViewSet(viewsets.ReadOnlyModelViewSet):
         }
         return Response(context)
 
-    def load_abi(self, file_path):
+    @staticmethod
+    def load_abi(file_path):
         """
         :param str file_path:
         :return dict: abi
@@ -98,11 +102,14 @@ class EthAccountViewSet(viewsets.ReadOnlyModelViewSet):
         abi = json_dict['abi']
         return abi
 
+
 class TransactionViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = TransactionSerializer
     filter_backends = (DjangoFilterBackend, filters.OrderingFilter)
-    filter_fields = ('user', 'eth_account', 'tx_hash', 'from_address', 'to_address', 'amount', 'gas', 'gas_price', 'value', 'network_id', 'is_active', 'created_at')
+    filter_fields = (
+    'user', 'eth_account', 'tx_hash', 'from_address', 'to_address', 'amount', 'gas', 'gas_price', 'value', 'network_id',
+    'is_active', 'created_at')
     ordering_fields = ('id', 'amount', 'gas', 'gas_price', 'value', 'created_at')
 
     def get_queryset(self):
@@ -225,7 +232,8 @@ class TransactionViewSet(viewsets.ReadOnlyModelViewSet):
         }
         return Response(context, status=status.HTTP_201_CREATED)
 
-    def load_abi(self, file_path):
+    @staticmethod
+    def load_abi(file_path):
         """
         :param str file_path:
         :return dict: abi
@@ -234,6 +242,7 @@ class TransactionViewSet(viewsets.ReadOnlyModelViewSet):
         json_dict = json.load(artifact)
         abi = json_dict['abi']
         return abi
+
 
 class ContractViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticated,)

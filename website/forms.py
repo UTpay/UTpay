@@ -4,7 +4,8 @@ from django.conf import settings
 from web3 import Web3, HTTPProvider
 import json
 
-from accounts.models import Account, EthAccount
+from accounts.models import Account
+
 
 class TransferForm(forms.Form):
     address = forms.CharField(
@@ -39,7 +40,7 @@ class TransferForm(forms.Form):
 
     def clean_password(self):
         password = self.cleaned_data.get('password', None)
-        if password == None:
+        if password is None:
             raise ValidationError('パスワードを入力してください。')
 
         if not self.user.check_password(password):
@@ -49,7 +50,7 @@ class TransferForm(forms.Form):
 
     def clean_address(self):
         address = self.cleaned_data.get('address', None)
-        if address == None:
+        if address is None:
             raise ValidationError('アドレスを入力してください。')
 
         web3 = Web3(HTTPProvider(settings.WEB3_PROVIDER))
@@ -65,7 +66,7 @@ class TransferForm(forms.Form):
     def clean_amount(self):
         account = Account.objects.get(user=self.user)
         amount = self.cleaned_data.get('amount', None)
-        if amount == None:
+        if amount is None:
             raise ValidationError('金額を入力してください。')
 
         if account.balance < amount:
@@ -73,7 +74,8 @@ class TransferForm(forms.Form):
 
         return amount
 
-    def load_abi(self, file_path):
+    @staticmethod
+    def load_abi(file_path):
         """
         :param str file_path:
         :return dict: abi
@@ -83,7 +85,8 @@ class TransferForm(forms.Form):
         abi = json_dict['abi']
         return abi
 
-    def is_ut_address(self, address):
+    @staticmethod
+    def is_ut_address(address):
         """
         :param str address:
         :return bool:

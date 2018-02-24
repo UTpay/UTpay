@@ -10,13 +10,16 @@ import qrcode
 
 from accounts.models import *
 
+
 class DateTimeFieldAware(serializers.DateTimeField):
     """
     Class to make output of a DateTime Field timezone aware
     """
+
     def to_representation(self, value):
         value = timezone.localtime(value)
         return super(DateTimeFieldAware, self).to_representation(value)
+
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -28,7 +31,12 @@ class UserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         # Create User (仮登録)
-        user = User.objects.create_user(username=validated_data['username'], email=validated_data['email'], password=validated_data['password'], is_active=False)
+        user = User.objects.create_user(
+            username=validated_data['username'],
+            email=validated_data['email'],
+            password=validated_data['password'],
+            is_active=False
+        )
 
         # Create Activate
         activate_key = self.create_activate_key()
@@ -40,14 +48,14 @@ class UserSerializer(serializers.ModelSerializer):
         while Account.objects.filter(address=ut_address).exists():
             ut_address = self.make_ut_address()
         qrcode_path = self.make_qrcode(ut_address, file_dir='/images/qrcode/account/')
-        account = Account.objects.create(user=user, address=ut_address, qrcode=qrcode_path)
+        Account.objects.create(user=user, address=ut_address, qrcode=qrcode_path)
 
         # Create EthAccount
         web3 = Web3(HTTPProvider(settings.WEB3_PROVIDER))
         password = self.make_random_password(length=30)
         eth_address = web3.personal.newAccount(password)
         qrcode_path = self.make_qrcode(eth_address, file_dir='/images/qrcode/eth_account/')
-        eth_account = EthAccount.objects.create(user=user, address=eth_address, password=password, qrcode=qrcode_path)
+        EthAccount.objects.create(user=user, address=eth_address, password=password, qrcode=qrcode_path)
 
         # Send activation email
         # FIXME: 自動で `base_url` を取得したい
@@ -60,7 +68,8 @@ class UserSerializer(serializers.ModelSerializer):
 
         return user
 
-    def validate_email(self, email):
+    @staticmethod
+    def validate_email(email):
         """
         :param str email:
         :return str: cleaned email
@@ -72,14 +81,16 @@ class UserSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('既に登録されているメールアドレスです。')
         return email
 
-    def create_activate_key(self):
+    @staticmethod
+    def create_activate_key():
         """
         ランダムな文字列を生成
         :return str: UUID
         """
         return uuid.uuid4().hex
 
-    def make_ut_address(self):
+    @staticmethod
+    def make_ut_address():
         """
         ランダムな42文字のUTアドレスを生成 (bitcoin base58)
         :return str: address
@@ -88,7 +99,8 @@ class UserSerializer(serializers.ModelSerializer):
         address = 'UT' + ''.join(secrets.choice(base58_alphabet) for _ in range(40))
         return address
 
-    def make_random_password(self, length):
+    @staticmethod
+    def make_random_password(length):
         """
         ランダムなパスワードを生成
         :param int length: パスワードの文字数
@@ -98,7 +110,8 @@ class UserSerializer(serializers.ModelSerializer):
         password = ''.join(secrets.choice(alphabet) for _ in range(length))
         return password
 
-    def make_qrcode(self, address, file_dir):
+    @staticmethod
+    def make_qrcode(address, file_dir):
         """
         QRコードを生成
         :param str address:
@@ -111,6 +124,7 @@ class UserSerializer(serializers.ModelSerializer):
         img.save(settings.MEDIA_ROOT + file_path)
         return file_path
 
+
 class EthAccountSerializer(serializers.ModelSerializer):
     user = UserSerializer()
 
@@ -118,19 +132,23 @@ class EthAccountSerializer(serializers.ModelSerializer):
         model = EthAccount
         fields = ('id', 'user', 'address', 'qrcode')
 
+
 class TransactionSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     eth_account = EthAccountSerializer()
     amount_fixed = serializers.SerializerMethodField()
     created_at = DateTimeFieldAware(format="%Y/%m/%d %H:%M:%S")
 
-    def get_amount_fixed(self, obj):
+    @staticmethod
+    def get_amount_fixed(obj):
         num_suffix = 1000
         return obj.amount / num_suffix
 
     class Meta:
         model = Transaction
-        fields = ('id', 'user', 'eth_account', 'tx_hash', 'from_address', 'to_address', 'amount', 'amount_fixed', 'gas', 'gas_price', 'value', 'network_id', 'is_active', 'created_at')
+        fields = ('id', 'user', 'eth_account', 'tx_hash', 'from_address', 'to_address', 'amount', 'amount_fixed', 'gas',
+                  'gas_price', 'value', 'network_id', 'is_active', 'created_at')
+
 
 class ContractSerializer(serializers.ModelSerializer):
     verified_at = DateTimeFieldAware(format="%Y/%m/%d %H:%M:%S")
@@ -139,4 +157,5 @@ class ContractSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Contract
-        fields = ('id', 'address', 'qrcode', 'name', 'description', 'code', 'is_active', 'is_verified', 'is_banned', 'verified_at', 'created_at', 'modified_at')
+        fields = ('id', 'address', 'qrcode', 'name', 'description', 'code', 'is_active', 'is_verified', 'is_banned',
+                  'verified_at', 'created_at', 'modified_at')

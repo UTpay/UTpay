@@ -14,8 +14,10 @@ from .models import *
 from accounts.models import EthAccount, OffChainTransaction, Transaction
 from .forms import *
 
+
 class IndexView(TemplateView):
     template_name = 'index.html'
+
 
 @method_decorator(login_required, name='dispatch')
 class TransferView(View):
@@ -71,7 +73,8 @@ class TransferView(View):
                 UTCoin = web3.eth.contract(abi=abi, address=settings.UTCOIN_ADDRESS)
                 if web3.personal.unlockAccount(admin_eth_account.address, admin_eth_account.password, duration=hex(60)):
                     try:
-                        tx_hash = UTCoin.transact({'from': admin_eth_account.address}).transfer(to_address, amount - fee)
+                        tx_hash = UTCoin.transact({'from': admin_eth_account.address}).transfer(to_address,
+                                                                                                amount - fee)
 
                         with transaction.atomic():
                             from_account.balance -= amount
@@ -90,7 +93,7 @@ class TransferView(View):
                                 gas_price=tx_info['gasPrice'],
                                 value=tx_info['value'],
                                 network_id=tx_info['networkId']
-                        )
+                            )
                     except Exception as e:
                         print(e)
 
@@ -122,7 +125,8 @@ class TransferView(View):
         form = TransferForm(user=self.request.user, initial={'fee': fee, 'balance': balance})
         return form
 
-    def is_ut_address(self, address):
+    @staticmethod
+    def is_ut_address(address: str) -> bool:
         """
         :param str address:
         :return bool:
@@ -132,7 +136,8 @@ class TransferView(View):
                 return True
         return False
 
-    def load_abi(self, file_path):
+    @staticmethod
+    def load_abi(file_path: str):
         """
         :param str file_path:
         :return dict: abi

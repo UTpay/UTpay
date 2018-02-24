@@ -7,6 +7,7 @@ import json
 
 from accounts.models import EthAccount, Transaction
 
+
 class Command(BaseCommand):
     help = 'Transfer UTCoin.'
 
@@ -106,7 +107,8 @@ class Command(BaseCommand):
 
         print('送金が完了しました！')
 
-    def load_abi(self, file_path):
+    @staticmethod
+    def load_abi(file_path):
         artifact = open(file_path, 'r')
         json_dict = json.load(artifact)
         abi = json_dict['abi']
