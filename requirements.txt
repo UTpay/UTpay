@@ -9,7 +9,7 @@ djangorestframework==3.7.7
 djangorestframework-jwt==1.11.0
 eth-abi==0.5.0
 eth-keyfile==0.5.1
-eth-keys==0.2.0b2
+eth-keys==0.2.0b3
 eth-tester==0.1.0b20
 eth-utils==0.8.1
 ethereum-keys==0.1.0a9
