@@ -9,6 +9,7 @@ app_name = 'api'
 
 router = DefaultRouter()
 router.register(r'users', UserViewSet, base_name='user')
+router.register(r'accounts', AccountViewSet, base_name='account')
 router.register(r'eth_accounts', EthAccountViewSet, base_name='eth_account')
 router.register(r'transactions', TransactionViewSet, base_name='transaction')
 router.register(r'eth_transactions', EthTransactionViewSet, base_name='eth_transaction')

@@ -40,6 +40,14 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
         return User.objects.filter(pk=self.request.user.id)
 
 
+class AccountViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = AccountSerializer
+
+    def get_queryset(self):
+        return Account.objects.filter(user=self.request.user)
+
+
 class EthAccountViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = EthAccountSerializer
