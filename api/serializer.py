@@ -141,6 +141,16 @@ class EthAccountSerializer(serializers.ModelSerializer):
         fields = ('id', 'user', 'address', 'qrcode')
 
 
+class TransactionSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    account = AccountSerializer()
+    created_at = DateTimeFieldAware(format="%Y/%m/%d %H:%M:%S")
+
+    class Meta:
+        model = Transaction
+        fields = ('id', 'user', 'account', 'from_address', 'to_address', 'amount', 'is_active', 'created_at')
+
+
 class EthTransactionSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     eth_account = EthAccountSerializer()
@@ -156,16 +166,6 @@ class EthTransactionSerializer(serializers.ModelSerializer):
         model = EthTransaction
         fields = ('id', 'user', 'eth_account', 'tx_hash', 'from_address', 'to_address', 'amount', 'amount_fixed', 'gas',
                   'gas_price', 'value', 'network_id', 'is_active', 'created_at')
-
-
-class OffChainTransactionSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
-    account = AccountSerializer()
-    created_at = DateTimeFieldAware(format="%Y/%m/%d %H:%M:%S")
-
-    class Meta:
-        model = OffChainTransaction
-        fields = ('id', 'user', 'account', 'from_address', 'to_address', 'amount', 'is_active', 'created_at')
 
 
 class ContractSerializer(serializers.ModelSerializer):

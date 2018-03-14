@@ -10,8 +10,8 @@ app_name = 'api'
 router = DefaultRouter()
 router.register(r'users', UserViewSet, base_name='user')
 router.register(r'eth_accounts', EthAccountViewSet, base_name='eth_account')
+router.register(r'transactions', TransactionViewSet, base_name='transaction')
 router.register(r'eth_transactions', EthTransactionViewSet, base_name='eth_transaction')
-router.register(r'off_chain_transactions', OffChainTransactionViewSet, base_name='off_chain_transaction')
 router.register(r'contracts', ContractViewSet, base_name='contract')
 
 urlpatterns = [

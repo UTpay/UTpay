@@ -11,7 +11,7 @@ from decimal import *
 import json
 
 from .models import *
-from accounts.models import EthTransaction, OffChainTransaction
+from accounts.models import Transaction, EthTransaction
 from .forms import *
 
 
@@ -50,7 +50,7 @@ class TransferView(View):
                     to_account.save()
 
                     # Create OffChainTransaction
-                    off_chain_transaction = OffChainTransaction.objects.create(
+                    transaction = Transaction.objects.create(
                         user=request.user,
                         account=from_account,
                         from_address=from_account.address,

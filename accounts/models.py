@@ -44,7 +44,7 @@ class EthAccount(models.Model):
 
 
 # Off-Chain Transaction information (internal)
-class OffChainTransaction(models.Model):
+class Transaction(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     account = models.ForeignKey(Account, on_delete=models.PROTECT)
     from_address = models.CharField('From', max_length=42)

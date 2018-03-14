@@ -103,6 +103,19 @@ class EthAccountViewSet(viewsets.ReadOnlyModelViewSet):
         return abi
 
 
+class TransactionViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = TransactionSerializer
+    filter_backends = (DjangoFilterBackend, filters.OrderingFilter)
+    filter_fields = (
+        'user', 'account', 'from_address', 'to_address', 'amount', 'is_active', 'created_at')
+    ordering_fields = ('id', 'amount', 'created_at')
+
+    def get_queryset(self):
+        address = self.request.user.account.address
+        return Transaction.objects.filter(Q(from_address=address) | Q(to_address=address))
+
+
 class EthTransactionViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = EthTransactionSerializer
@@ -243,19 +256,6 @@ class EthTransactionViewSet(viewsets.ReadOnlyModelViewSet):
         json_dict = json.load(artifact)
         abi = json_dict['abi']
         return abi
-
-
-class OffChainTransactionViewSet(viewsets.ReadOnlyModelViewSet):
-    permission_classes = (permissions.IsAuthenticated,)
-    serializer_class = OffChainTransactionSerializer
-    filter_backends = (DjangoFilterBackend, filters.OrderingFilter)
-    filter_fields = (
-        'user', 'account', 'from_address', 'to_address', 'amount', 'is_active', 'created_at')
-    ordering_fields = ('id', 'amount', 'created_at')
-
-    def get_queryset(self):
-        address = self.request.user.account.address
-        return OffChainTransaction.objects.filter(Q(from_address=address) | Q(to_address=address))
 
 
 class ContractViewSet(viewsets.ModelViewSet):
