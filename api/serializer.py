@@ -142,18 +142,14 @@ class EthAccountSerializer(serializers.ModelSerializer):
 
 
 class TransactionSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
-    account = AccountSerializer()
     created_at = DateTimeFieldAware(format="%Y/%m/%d %H:%M:%S")
 
     class Meta:
         model = Transaction
-        fields = ('id', 'user', 'account', 'from_address', 'to_address', 'amount', 'is_active', 'created_at')
+        fields = ('id', 'from_address', 'to_address', 'amount', 'is_active', 'created_at')
 
 
 class EthTransactionSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
-    eth_account = EthAccountSerializer()
     amount_fixed = serializers.SerializerMethodField()
     created_at = DateTimeFieldAware(format="%Y/%m/%d %H:%M:%S")
 
@@ -164,8 +160,8 @@ class EthTransactionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EthTransaction
-        fields = ('id', 'user', 'eth_account', 'tx_hash', 'from_address', 'to_address', 'amount', 'amount_fixed', 'gas',
-                  'gas_price', 'value', 'network_id', 'is_active', 'created_at')
+        fields = ('id', 'tx_hash', 'from_address', 'to_address', 'amount', 'amount_fixed', 'gas', 'gas_price', 'value',
+                  'network_id', 'is_active', 'created_at')
 
 
 class ContractSerializer(serializers.ModelSerializer):

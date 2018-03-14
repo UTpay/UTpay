@@ -26,18 +26,17 @@ class EthAccountAdmin(admin.ModelAdmin):
 
 
 class TransactionAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'account', 'from_address', 'to_address', 'amount', 'is_active', 'created_at')
-    list_filter = ('user', 'account', 'from_address', 'to_address', 'amount', 'is_active', 'created_at')
+    list_display = ('id', 'from_address', 'to_address', 'amount', 'is_active', 'created_at')
+    list_filter = ('from_address', 'to_address', 'amount', 'is_active', 'created_at')
     ordering = ('id',)
 
 
 class EthTransactionAdmin(admin.ModelAdmin):
     list_display = (
-        'id', 'user', 'eth_account', 'tx_hash', 'from_address', 'to_address', 'amount', 'gas', 'gas_price', 'value',
-        'network_id', 'is_active', 'created_at')
+        'id', 'tx_hash', 'from_address', 'to_address', 'amount', 'gas', 'gas_price', 'value', 'network_id', 'is_active',
+        'created_at')
     list_filter = (
-        'user', 'eth_account', 'from_address', 'to_address', 'amount', 'gas', 'gas_price', 'value', 'network_id',
-        'is_active', 'created_at')
+        'from_address', 'to_address', 'amount', 'gas', 'gas_price', 'value', 'network_id', 'is_active', 'created_at')
     ordering = ('id',)
 
 

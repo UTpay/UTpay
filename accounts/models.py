@@ -45,8 +45,6 @@ class EthAccount(models.Model):
 
 # Off-Chain Transaction information (internal)
 class Transaction(models.Model):
-    user = models.ForeignKey(User, on_delete=models.PROTECT)
-    account = models.ForeignKey(Account, on_delete=models.PROTECT)
     from_address = models.CharField('From', max_length=42)
     to_address = models.CharField('To', max_length=42)
     amount = models.DecimalField('Amount', max_digits=12, decimal_places=3, help_text='UTC')
@@ -59,8 +57,6 @@ class Transaction(models.Model):
 
 # On-Chain Transaction information (external)
 class EthTransaction(models.Model):
-    user = models.ForeignKey(User, on_delete=models.PROTECT)
-    eth_account = models.ForeignKey(EthAccount, on_delete=models.PROTECT)
     tx_hash = models.CharField('TxHash', max_length=66, unique=True)
     from_address = models.CharField('From', max_length=42)
     to_address = models.CharField('To', max_length=42)
