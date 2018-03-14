@@ -1,12 +1,12 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404
 from django.conf import settings
-from django.contrib.auth.models import User
 from django.db import transaction
 from django.db.models import Q
 from rest_framework import permissions, generics, status, viewsets, filters
 from rest_framework.response import Response
 from rest_framework.decorators import detail_route, list_route
 from django_filters.rest_framework import DjangoFilterBackend
+from decimal import *
 from web3 import Web3, HTTPProvider
 import json
 import qrcode
@@ -107,13 +107,101 @@ class TransactionViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = TransactionSerializer
     filter_backends = (DjangoFilterBackend, filters.OrderingFilter)
-    filter_fields = (
-        'user', 'account', 'from_address', 'to_address', 'amount', 'is_active', 'created_at')
+    filter_fields = ('from_address', 'to_address', 'amount', 'is_active', 'created_at')
     ordering_fields = ('id', 'amount', 'created_at')
 
     def get_queryset(self):
         address = self.request.user.account.address
         return Transaction.objects.filter(Q(from_address=address) | Q(to_address=address))
+
+    @list_route(methods=['post'])
+    @transaction.atomic
+    def transfer(self, request):
+        from_account = request.user.account
+
+        # Receive params
+        body = json.loads(request.body)
+        to_address = body['address']
+        amount = body['amount']
+        if not (to_address and amount):
+            error_msg = 'アドレスまたは金額が入力されていません。'
+            print('Error:', error_msg)
+            context = {
+                'success': False,
+                'detail': error_msg
+            }
+            return Response(context)
+
+        # Validate address
+        if not self.is_ut_address(to_address):
+            error_msg = '無効なアドレスです。'
+            print('Error:', error_msg)
+            context = {
+                'success': False,
+                'detail': error_msg
+            }
+            return Response(context)
+
+        amount = Decimal(amount)
+        to_account = Account.objects.get(address=to_address)
+
+        # Validate amount
+        if from_account.balance < amount:
+            error_msg = '送金可能額を超えています。'
+            print('Error:', error_msg)
+            context = {
+                'success': False,
+                'detail': error_msg
+            }
+            return Response(context)
+
+        # UTCoin 送金
+        with transaction.atomic():
+            from_account.balance -= amount
+            to_account.balance += amount
+            from_account.save()
+            to_account.save()
+
+            # Create Transaction
+            tx = Transaction.objects.create(
+                from_address=from_account.address,
+                to_address=to_address,
+                amount=amount
+            )
+
+        # TODO: コントラクト実行
+        # try:
+        #     transfer_callback(tx_hash, from_address, to_address, amount_int, amount)
+        # except Exception as e:
+        #     print(e)
+        #     error_msg = 'コールバック処理に失敗しました。'
+        #     print('Error:', error_msg)
+        #
+        # else:
+        #     error_msg = 'アカウントのアンロックに失敗しました。'
+        #     print('Error:', error_msg)
+        #     context = {
+        #         'success': False,
+        #         'detail': error_msg
+        #     }
+        #     return Response(context)
+
+        context = {
+            'success': True,
+            'transaction': TransactionSerializer(tx).data
+        }
+        return Response(context, status=status.HTTP_201_CREATED)
+
+    @staticmethod
+    def is_ut_address(address):
+        """
+        :param str address:
+        :return bool:
+        """
+        if address[0:2] == 'UT' and len(address) == 42:
+            if Account.objects.filter(address=address).exists():
+                return True
+        return False
 
 
 class EthTransactionViewSet(viewsets.ReadOnlyModelViewSet):
@@ -121,9 +209,8 @@ class EthTransactionViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = EthTransactionSerializer
     filter_backends = (DjangoFilterBackend, filters.OrderingFilter)
     filter_fields = (
-        'user', 'eth_account', 'tx_hash', 'from_address', 'to_address', 'amount', 'gas', 'gas_price', 'value',
-        'network_id',
-        'is_active', 'created_at')
+        'tx_hash', 'from_address', 'to_address', 'amount', 'gas', 'gas_price', 'value', 'network_id', 'is_active',
+        'created_at')
     ordering_fields = ('id', 'amount', 'gas', 'gas_price', 'value', 'created_at')
 
     def get_queryset(self):
