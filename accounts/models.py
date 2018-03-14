@@ -39,9 +39,26 @@ class EthAccount(models.Model):
     def __str__(self):
         return self.address
 
+    class Meta:
+        verbose_name = 'ETH account'
+
+
+# Off-Chain Transaction information (internal)
+class OffChainTransaction(models.Model):
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    account = models.ForeignKey(Account, on_delete=models.PROTECT)
+    from_address = models.CharField('From', max_length=42)
+    to_address = models.CharField('To', max_length=42)
+    amount = models.DecimalField('Amount', max_digits=12, decimal_places=3, help_text='UTC')
+    is_active = models.BooleanField('有効', default=True)
+    created_at = models.DateTimeField('作成日時', default=timezone.now)
+
+    def __str__(self):
+        return str(self.id)
+
 
 # On-Chain Transaction information (external)
-class Transaction(models.Model):
+class EthTransaction(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     eth_account = models.ForeignKey(EthAccount, on_delete=models.PROTECT)
     tx_hash = models.CharField('TxHash', max_length=66, unique=True)
@@ -58,19 +75,8 @@ class Transaction(models.Model):
     def __str__(self):
         return self.tx_hash
 
-
-# Off-Chain Transaction information (internal)
-class OffChainTransaction(models.Model):
-    user = models.ForeignKey(User, on_delete=models.PROTECT)
-    account = models.ForeignKey(Account, on_delete=models.PROTECT)
-    from_address = models.CharField('From', max_length=42)
-    to_address = models.CharField('To', max_length=42)
-    amount = models.DecimalField('Amount', max_digits=12, decimal_places=3, help_text='UTC')
-    is_active = models.BooleanField('有効', default=True)
-    created_at = models.DateTimeField('作成日時', default=timezone.now)
-
-    def __str__(self):
-        return str(self.id)
+    class Meta:
+        verbose_name = 'ETH transaction'
 
 
 # User defined function

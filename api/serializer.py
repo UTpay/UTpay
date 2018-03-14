@@ -141,7 +141,7 @@ class EthAccountSerializer(serializers.ModelSerializer):
         fields = ('id', 'user', 'address', 'qrcode')
 
 
-class TransactionSerializer(serializers.ModelSerializer):
+class EthTransactionSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     eth_account = EthAccountSerializer()
     amount_fixed = serializers.SerializerMethodField()
@@ -153,7 +153,7 @@ class TransactionSerializer(serializers.ModelSerializer):
         return obj.amount / num_suffix
 
     class Meta:
-        model = Transaction
+        model = EthTransaction
         fields = ('id', 'user', 'eth_account', 'tx_hash', 'from_address', 'to_address', 'amount', 'amount_fixed', 'gas',
                   'gas_price', 'value', 'network_id', 'is_active', 'created_at')
 

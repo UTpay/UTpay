@@ -103,9 +103,9 @@ class EthAccountViewSet(viewsets.ReadOnlyModelViewSet):
         return abi
 
 
-class TransactionViewSet(viewsets.ReadOnlyModelViewSet):
+class EthTransactionViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (permissions.IsAuthenticated,)
-    serializer_class = TransactionSerializer
+    serializer_class = EthTransactionSerializer
     filter_backends = (DjangoFilterBackend, filters.OrderingFilter)
     filter_fields = (
         'user', 'eth_account', 'tx_hash', 'from_address', 'to_address', 'amount', 'gas', 'gas_price', 'value',
@@ -116,7 +116,7 @@ class TransactionViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         eth_account = get_object_or_404(EthAccount, user=self.request.user)
         address = eth_account.address
-        return Transaction.objects.filter(Q(from_address=address) | Q(to_address=address))
+        return EthTransaction.objects.filter(Q(from_address=address) | Q(to_address=address))
 
     @list_route(methods=['post'])
     @transaction.atomic

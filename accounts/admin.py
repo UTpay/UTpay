@@ -31,7 +31,7 @@ class OffChainTransactionAdmin(admin.ModelAdmin):
     ordering = ('id',)
 
 
-class TransactionAdmin(admin.ModelAdmin):
+class EthTransactionAdmin(admin.ModelAdmin):
     list_display = (
         'id', 'user', 'eth_account', 'tx_hash', 'from_address', 'to_address', 'amount', 'gas', 'gas_price', 'value',
         'network_id', 'is_active', 'created_at')
@@ -56,5 +56,5 @@ admin.site.register(Activate, ActivateAdmin)
 admin.site.register(Account, AccountAdmin)
 admin.site.register(EthAccount, EthAccountAdmin)
 admin.site.register(OffChainTransaction, OffChainTransactionAdmin)
-admin.site.register(Transaction, TransactionAdmin)
+admin.site.register(EthTransaction, EthTransactionAdmin)
 admin.site.register(Contract, ContractAdmin)

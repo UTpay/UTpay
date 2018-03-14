@@ -11,7 +11,7 @@ from decimal import *
 import json
 
 from .models import *
-from accounts.models import EthAccount, OffChainTransaction, Transaction
+from accounts.models import EthTransaction, OffChainTransaction
 from .forms import *
 
 
@@ -82,7 +82,7 @@ class TransferView(View):
 
                             # Create Transaction
                             tx_info = web3.eth.getTransaction(tx_hash)
-                            tx = Transaction.objects.create(
+                            tx = EthTransaction.objects.create(
                                 user=request.user,
                                 eth_account=admin_eth_account,
                                 tx_hash=tx_hash,
