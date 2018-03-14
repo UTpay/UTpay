@@ -1,4 +1,5 @@
 import json
+
 from django.conf import settings
 from django.test import TestCase
 from web3 import Web3, HTTPProvider

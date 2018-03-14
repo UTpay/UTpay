@@ -1,7 +1,7 @@
 import secrets
 import string
 import uuid
-import qrcode
+
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.test import TestCase
@@ -28,14 +28,14 @@ class UserModelTests(TestCase):
         ut_address = self.make_ut_address()
         while Account.objects.filter(address=ut_address).exists():
             ut_address = self.make_ut_address()
-        qrcode_path = self.make_qrcode(ut_address, file_dir='/images/qrcode/account/')
+        qrcode_path = '/images/qrcode/account/' + ut_address + '.png'
         Account.objects.create(user=user, address=ut_address, qrcode=qrcode_path)
 
         # Create EthAccount
         w3 = Web3(HTTPProvider(settings.WEB3_PROVIDER))
         password = self.make_random_password(length=30)
         eth_address = w3.personal.newAccount(password)
-        qrcode_path = self.make_qrcode(eth_address, file_dir='/images/qrcode/eth_account/')
+        qrcode_path = '/images/qrcode/eth_account/' + eth_address + '.png'
         EthAccount.objects.create(user=user, address=eth_address, password=password, qrcode=qrcode_path)
 
     @staticmethod
@@ -66,20 +66,6 @@ class UserModelTests(TestCase):
         alphabet = string.ascii_letters + string.digits
         password = ''.join(secrets.choice(alphabet) for _ in range(length))
         return password
-
-    @staticmethod
-    def make_qrcode(address, file_dir):
-        """
-        QRコードを生成
-        :param str address:
-        :param str file_dir:
-        :return str: file path
-        """
-        img = qrcode.make(address)
-        file_name = address + '.png'
-        file_path = file_dir + file_name
-        img.save(settings.MEDIA_ROOT + file_path)
-        return file_path
 
     def test_is_empty(self):
         users = User.objects.all()
