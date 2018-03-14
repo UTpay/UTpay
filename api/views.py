@@ -245,6 +245,19 @@ class TransactionViewSet(viewsets.ReadOnlyModelViewSet):
         return abi
 
 
+class OffChainTransactionViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = OffChainTransactionSerializer
+    filter_backends = (DjangoFilterBackend, filters.OrderingFilter)
+    filter_fields = (
+        'user', 'account', 'from_address', 'to_address', 'amount', 'is_active', 'created_at')
+    ordering_fields = ('id', 'amount', 'created_at')
+
+    def get_queryset(self):
+        address = self.request.user.account.address
+        return OffChainTransaction.objects.filter(Q(from_address=address) | Q(to_address=address))
+
+
 class ContractViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = ContractSerializer

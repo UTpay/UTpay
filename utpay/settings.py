@@ -176,8 +176,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 # Ethereum
 
 # web3 provider
-# WEB3_PROVIDER = 'http://localhost:8545' # Ropsten
-WEB3_PROVIDER = 'http://localhost:9545' # Truffle
+WEB3_PROVIDER = 'http://localhost:8545' # development
 
 # Contract settings
 ARTIFACT_PATH = 'static/contracts/UTCoin.json'
