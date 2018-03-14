@@ -1,18 +1,16 @@
-from django.shortcuts import get_object_or_404
-from django.conf import settings
+import json
+from decimal import *
+
 from django.db import transaction
 from django.db.models import Q
-from rest_framework import permissions, generics, status, viewsets, filters
-from rest_framework.response import Response
-from rest_framework.decorators import detail_route, list_route
+from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from decimal import *
-from web3 import Web3, HTTPProvider
-import json
-import qrcode
+from rest_framework import permissions, generics, status, viewsets, filters
+from rest_framework.decorators import detail_route, list_route
+from rest_framework.response import Response
 
-from .serializer import *
 from callback_functions.transfer_callback import transfer_callback
+from .serializer import *
 
 
 class RegisterView(generics.CreateAPIView):
@@ -62,10 +60,10 @@ class EthAccountViewSet(viewsets.ReadOnlyModelViewSet):
 
         # Get UTCoin balance
         num_suffix = 1000
-        web3 = Web3(HTTPProvider(settings.WEB3_PROVIDER))
-        eth_balance = web3.fromWei(web3.eth.getBalance(address), 'ether')
+        w3 = Web3(HTTPProvider(settings.WEB3_PROVIDER))
+        eth_balance = w3.fromWei(w3.eth.getBalance(address), 'ether')
         abi = self.load_abi(settings.ARTIFACT_PATH)
-        UTCoin = web3.eth.contract(abi=abi, address=settings.UTCOIN_ADDRESS)
+        UTCoin = w3.eth.contract(abi=abi, address=settings.UTCOIN_ADDRESS)
         balance_int = UTCoin.call().balanceOf(address)
         balance = float(balance_int / num_suffix)
 
@@ -252,8 +250,8 @@ class EthTransactionViewSet(viewsets.ReadOnlyModelViewSet):
         amount_int = int(amount * num_suffix)
 
         # Validate address
-        web3 = Web3(HTTPProvider(settings.WEB3_PROVIDER))
-        if not web3.isAddress(to_address):
+        w3 = Web3(HTTPProvider(settings.WEB3_PROVIDER))
+        if not w3.isAddress(to_address):
             error_msg = '無効なアドレスです。'
             print('Error:', error_msg)
             context = {
@@ -274,7 +272,7 @@ class EthTransactionViewSet(viewsets.ReadOnlyModelViewSet):
 
         # Get UTCoin balance
         abi = self.load_abi(settings.ARTIFACT_PATH)
-        UTCoin = web3.eth.contract(abi=abi, address=settings.UTCOIN_ADDRESS)
+        UTCoin = w3.eadth.contract(abi=abi, address=settings.UTCOIN_ADDRESS)
         balance = UTCoin.call().balanceOf(from_address)
 
         if balance < amount + fee:
@@ -287,15 +285,13 @@ class EthTransactionViewSet(viewsets.ReadOnlyModelViewSet):
             return Response(context)
 
         # Transfer UTCoin
-        if web3.personal.unlockAccount(from_address, eth_account.password, duration=hex(300)):
+        if w3.personal.unlockAccount(from_address, eth_account.password, duration=hex(300)):
             try:
                 tx_hash = UTCoin.transact({'from': from_address}).transfer(to_address, amount_int)
 
                 # Create Transaction
-                transaction_info = web3.eth.getTransaction(tx_hash)
-                transaction = Transaction.objects.create(
-                    user=request.user,
-                    eth_account=eth_account,
+                transaction_info = w3.eth.getTransaction(tx_hash)
+                Transaction.objects.create(
                     tx_hash=tx_hash,
                     from_address=from_address,
                     to_address=to_address,

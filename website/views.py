@@ -1,16 +1,13 @@
+from decimal import *
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.utils.decorators import method_decorator
+from django.db import transaction
 from django.shortcuts import render
+from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import TemplateView
-from django.conf import settings
-from django.db import transaction
-from web3 import Web3, HTTPProvider
-from decimal import *
-import json
 
-from .models import *
 from accounts.models import Transaction, EthTransaction
 from .forms import *
 
@@ -66,10 +63,10 @@ class TransferView(View):
                 fee = 0
 
                 # UTCoin 送金
-                web3 = Web3(HTTPProvider(settings.WEB3_PROVIDER))
+                w3 = Web3(HTTPProvider(settings.WEB3_PROVIDER))
                 abi = self.load_abi(settings.ARTIFACT_PATH)
-                UTCoin = web3.eth.contract(abi=abi, address=settings.UTCOIN_ADDRESS)
-                if web3.personal.unlockAccount(admin_eth_account.address, admin_eth_account.password, duration=hex(60)):
+                UTCoin = w3.eth.contract(abi=abi, address=settings.UTCOIN_ADDRESS)
+                if w3.personal.unlockAccount(admin_eth_account.address, admin_eth_account.password, duration=hex(60)):
                     try:
                         tx_hash = UTCoin.transact({'from': admin_eth_account.address}).transfer(to_address,
                                                                                                 amount - fee)
@@ -79,7 +76,7 @@ class TransferView(View):
                             from_account.save()
 
                             # Create Transaction
-                            tx_info = web3.eth.getTransaction(tx_hash)
+                            tx_info = w3.eth.getTransaction(tx_hash)
                             EthTransaction.objects.create(
                                 tx_hash=tx_hash,
                                 from_address=admin_eth_account.address,

@@ -1,6 +1,7 @@
 import secrets
 import string
 import uuid
+
 import qrcode
 from django.conf import settings
 from django.urls import reverse
