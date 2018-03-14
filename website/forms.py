@@ -1,8 +1,8 @@
-from django import forms
-from django.core.exceptions import ValidationError
-from django.conf import settings
-from web3 import Web3, HTTPProvider
 import json
+from django import forms
+from django.conf import settings
+from django.core.exceptions import ValidationError
+from web3 import Web3, HTTPProvider
 
 from accounts.models import Account
 

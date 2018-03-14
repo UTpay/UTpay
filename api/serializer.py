@@ -1,12 +1,11 @@
-from django.conf import settings
-from django.contrib.auth.models import User
-from django.urls import reverse
-from rest_framework import serializers
-from web3 import Web3, HTTPProvider
 import secrets
 import string
 import uuid
 import qrcode
+from django.conf import settings
+from django.urls import reverse
+from rest_framework import serializers
+from web3 import Web3, HTTPProvider
 
 from accounts.models import *
 
