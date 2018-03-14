@@ -79,7 +79,6 @@ class EthTransaction(models.Model):
 class Contract(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     address = models.CharField('アドレス', max_length=42, unique=True, null=True, blank=True)
-    password = models.CharField('パスワード', max_length=30, null=True, blank=True)
     qrcode = models.ImageField('QR code', upload_to='images/qrcode/contract/', null=True, blank=True)
     name = models.CharField('名前', max_length=255)
     description = models.TextField('説明', null=True, blank=True, help_text='他の利用者に公開されます。')
