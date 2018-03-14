@@ -10,6 +10,7 @@ import qrcode
 
 from accounts.models import Contract
 
+
 class Command(BaseCommand):
     help = 'Create Ethereum account for the contract.'
 
@@ -53,7 +54,7 @@ class Command(BaseCommand):
         try:
             with transaction.atomic():
                 # Generate random password and address
-                web3 = Web3(HTTPProvider('http://localhost:8545'))
+                web3 = Web3(HTTPProvider(settings.WEB3_PROVIDER))
                 alphabet = string.ascii_letters + string.digits
                 password = ''.join(secrets.choice(alphabet) for _ in range(30))
                 address = web3.personal.newAccount(password)

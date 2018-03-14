@@ -7,6 +7,7 @@ import json
 
 from accounts.models import EthAccount, Transaction
 
+
 class Command(BaseCommand):
     help = 'Transfer UTCoin.'
 
@@ -17,7 +18,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         # Load contract
-        web3 = Web3(HTTPProvider('http://localhost:8545'))
+        web3 = Web3(HTTPProvider(settings.WEB3_PROVIDER))
         abi = self.load_abi(settings.ARTIFACT_PATH)
         UTCoin = web3.eth.contract(abi=abi, address=settings.UTCOIN_ADDRESS)
 
@@ -106,7 +107,8 @@ class Command(BaseCommand):
 
         print('送金が完了しました！')
 
-    def load_abi(self, file_path):
+    @staticmethod
+    def load_abi(file_path):
         artifact = open(file_path, 'r')
         json_dict = json.load(artifact)
         abi = json_dict['abi']

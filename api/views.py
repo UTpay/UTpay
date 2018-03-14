@@ -1,19 +1,19 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404
 from django.conf import settings
-from django.core.files import File
-from django.contrib.auth.models import User
 from django.db import transaction
 from django.db.models import Q
 from rest_framework import permissions, generics, status, viewsets, filters
 from rest_framework.response import Response
 from rest_framework.decorators import detail_route, list_route
 from django_filters.rest_framework import DjangoFilterBackend
+from decimal import *
 from web3 import Web3, HTTPProvider
 import json
 import qrcode
 
 from .serializer import *
 from callback_functions.transfer_callback import transfer_callback
+
 
 class RegisterView(generics.CreateAPIView):
     """
@@ -24,12 +24,13 @@ class RegisterView(generics.CreateAPIView):
     serializer_class = UserSerializer
 
     @transaction.atomic
-    def post(self, request, format=None):
+    def post(self, request):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (permissions.IsAuthenticated,)
@@ -37,6 +38,15 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         return User.objects.filter(pk=self.request.user.id)
+
+
+class AccountViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = AccountSerializer
+
+    def get_queryset(self):
+        return Account.objects.filter(user=self.request.user)
+
 
 class EthAccountViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (permissions.IsAuthenticated,)
@@ -52,7 +62,7 @@ class EthAccountViewSet(viewsets.ReadOnlyModelViewSet):
 
         # Get UTCoin balance
         num_suffix = 1000
-        web3 = Web3(HTTPProvider('http://localhost:8545'))
+        web3 = Web3(HTTPProvider(settings.WEB3_PROVIDER))
         eth_balance = web3.fromWei(web3.eth.getBalance(address), 'ether')
         abi = self.load_abi(settings.ARTIFACT_PATH)
         UTCoin = web3.eth.contract(abi=abi, address=settings.UTCOIN_ADDRESS)
@@ -89,23 +99,132 @@ class EthAccountViewSet(viewsets.ReadOnlyModelViewSet):
         }
         return Response(context)
 
-    def load_abi(self, file_path):
+    @staticmethod
+    def load_abi(file_path):
+        """
+        :param str file_path:
+        :return dict: abi
+        """
         artifact = open(file_path, 'r')
         json_dict = json.load(artifact)
         abi = json_dict['abi']
         return abi
 
+
 class TransactionViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = TransactionSerializer
     filter_backends = (DjangoFilterBackend, filters.OrderingFilter)
-    filter_fields = ('user', 'eth_account', 'tx_hash', 'from_address', 'to_address', 'amount', 'gas', 'gas_price', 'value', 'network_id', 'is_active', 'created_at')
+    filter_fields = ('from_address', 'to_address', 'amount', 'is_active', 'created_at')
+    ordering_fields = ('id', 'amount', 'created_at')
+
+    def get_queryset(self):
+        address = self.request.user.account.address
+        return Transaction.objects.filter(Q(from_address=address) | Q(to_address=address))
+
+    @list_route(methods=['post'])
+    @transaction.atomic
+    def transfer(self, request):
+        from_account = request.user.account
+
+        # Receive params
+        body = json.loads(request.body)
+        to_address = body['address']
+        amount = body['amount']
+        if not (to_address and amount):
+            error_msg = 'アドレスまたは金額が入力されていません。'
+            print('Error:', error_msg)
+            context = {
+                'success': False,
+                'detail': error_msg
+            }
+            return Response(context)
+
+        # Validate address
+        if not self.is_ut_address(to_address):
+            error_msg = '無効なアドレスです。'
+            print('Error:', error_msg)
+            context = {
+                'success': False,
+                'detail': error_msg
+            }
+            return Response(context)
+
+        amount = Decimal(amount)
+        to_account = Account.objects.get(address=to_address)
+
+        # Validate amount
+        if from_account.balance < amount:
+            error_msg = '送金可能額を超えています。'
+            print('Error:', error_msg)
+            context = {
+                'success': False,
+                'detail': error_msg
+            }
+            return Response(context)
+
+        # UTCoin 送金
+        with transaction.atomic():
+            from_account.balance -= amount
+            to_account.balance += amount
+            from_account.save()
+            to_account.save()
+
+            # Create Transaction
+            tx = Transaction.objects.create(
+                from_address=from_account.address,
+                to_address=to_address,
+                amount=amount
+            )
+
+        # TODO: コントラクト実行
+        # try:
+        #     transfer_callback(tx_hash, from_address, to_address, amount_int, amount)
+        # except Exception as e:
+        #     print(e)
+        #     error_msg = 'コールバック処理に失敗しました。'
+        #     print('Error:', error_msg)
+        #
+        # else:
+        #     error_msg = 'アカウントのアンロックに失敗しました。'
+        #     print('Error:', error_msg)
+        #     context = {
+        #         'success': False,
+        #         'detail': error_msg
+        #     }
+        #     return Response(context)
+
+        context = {
+            'success': True,
+            'transaction': TransactionSerializer(tx).data
+        }
+        return Response(context, status=status.HTTP_201_CREATED)
+
+    @staticmethod
+    def is_ut_address(address):
+        """
+        :param str address:
+        :return bool:
+        """
+        if address[0:2] == 'UT' and len(address) == 42:
+            if Account.objects.filter(address=address).exists():
+                return True
+        return False
+
+
+class EthTransactionViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = EthTransactionSerializer
+    filter_backends = (DjangoFilterBackend, filters.OrderingFilter)
+    filter_fields = (
+        'tx_hash', 'from_address', 'to_address', 'amount', 'gas', 'gas_price', 'value', 'network_id', 'is_active',
+        'created_at')
     ordering_fields = ('id', 'amount', 'gas', 'gas_price', 'value', 'created_at')
 
     def get_queryset(self):
         eth_account = get_object_or_404(EthAccount, user=self.request.user)
         address = eth_account.address
-        return Transaction.objects.filter(Q(from_address=address) | Q(to_address=address))
+        return EthTransaction.objects.filter(Q(from_address=address) | Q(to_address=address))
 
     @list_route(methods=['post'])
     @transaction.atomic
@@ -133,7 +252,7 @@ class TransactionViewSet(viewsets.ReadOnlyModelViewSet):
         amount_int = int(amount * num_suffix)
 
         # Validate address
-        web3 = Web3(HTTPProvider('http://localhost:8545'))
+        web3 = Web3(HTTPProvider(settings.WEB3_PROVIDER))
         if not web3.isAddress(to_address):
             error_msg = '無効なアドレスです。'
             print('Error:', error_msg)
@@ -222,11 +341,17 @@ class TransactionViewSet(viewsets.ReadOnlyModelViewSet):
         }
         return Response(context, status=status.HTTP_201_CREATED)
 
-    def load_abi(self, file_path):
+    @staticmethod
+    def load_abi(file_path):
+        """
+        :param str file_path:
+        :return dict: abi
+        """
         artifact = open(file_path, 'r')
         json_dict = json.load(artifact)
         abi = json_dict['abi']
         return abi
+
 
 class ContractViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticated,)

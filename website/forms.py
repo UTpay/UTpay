@@ -1,16 +1,17 @@
-from django import forms
-from django.core.exceptions import ValidationError
-from django.conf import settings
-from web3 import Web3, HTTPProvider
 import json
+from django import forms
+from django.conf import settings
+from django.core.exceptions import ValidationError
+from web3 import Web3, HTTPProvider
 
-from accounts.models import EthAccount
+from accounts.models import Account
+
 
 class TransferForm(forms.Form):
     address = forms.CharField(
         label='宛先',
         max_length=42,
-        help_text='例) 0x...',
+        help_text='例) UT... or 0x...',
         widget=forms.TextInput(attrs={'class': 'mdl-textfield__input'}),
     )
     amount = forms.FloatField(
@@ -39,33 +40,58 @@ class TransferForm(forms.Form):
 
     def clean_password(self):
         password = self.cleaned_data.get('password', None)
+        if password is None:
+            raise ValidationError('パスワードを入力してください。')
+
         if not self.user.check_password(password):
             raise ValidationError('パスワードが違います。')
+
         return password
 
     def clean_address(self):
-        web3 = Web3(HTTPProvider('http://localhost:8545'))
         address = self.cleaned_data.get('address', None)
-        if not web3.isAddress(address):
-            raise ValidationError('正しいアドレスを入力してください。')
-        return address
+        if address is None:
+            raise ValidationError('アドレスを入力してください。')
+
+        web3 = Web3(HTTPProvider(settings.WEB3_PROVIDER))
+        if self.is_ut_address(address):
+            if address != self.user.account.address:
+                return address
+        elif web3.isAddress(address):
+            if address != self.user.ethaccount.address:
+                return address
+
+        raise ValidationError('正しいアドレスを入力してください。')
 
     def clean_amount(self):
-        eth_account = EthAccount.objects.get(user=self.user)
-
-        # Get UTCoin balance
-        web3 = Web3(HTTPProvider('http://localhost:8545'))
-        abi = self.load_abi(settings.ARTIFACT_PATH)
-        UTCoin = web3.eth.contract(abi=abi, address=settings.UTCOIN_ADDRESS)
-        balance = UTCoin.call().balanceOf(eth_account.address)
-
+        account = Account.objects.get(user=self.user)
         amount = self.cleaned_data.get('amount', None)
-        if balance < amount:
+        if amount is None:
+            raise ValidationError('金額を入力してください。')
+
+        if account.balance < amount:
             raise ValidationError('送金可能額を超えています。')
+
         return amount
 
-    def load_abi(self, file_path):
+    @staticmethod
+    def load_abi(file_path):
+        """
+        :param str file_path:
+        :return dict: abi
+        """
         artifact = open(file_path, 'r')
         json_dict = json.load(artifact)
         abi = json_dict['abi']
         return abi
+
+    @staticmethod
+    def is_ut_address(address):
+        """
+        :param str address:
+        :return bool:
+        """
+        if address[0:2] == 'UT' and len(address) == 42:
+            if Account.objects.filter(address=address).exists():
+                return True
+        return False
