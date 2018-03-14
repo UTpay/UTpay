@@ -47,7 +47,7 @@ class EthAccount(models.Model):
 class Transaction(models.Model):
     from_address = models.CharField('From', max_length=42)
     to_address = models.CharField('To', max_length=42)
-    amount = models.DecimalField('Amount', max_digits=12, decimal_places=3, help_text='UTC')
+    amount = models.DecimalField('金額', max_digits=12, decimal_places=3, help_text='UTC')
     is_active = models.BooleanField('有効', default=True)
     created_at = models.DateTimeField('作成日時', default=timezone.now)
 

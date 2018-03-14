@@ -50,9 +50,7 @@ class TransferView(View):
                     to_account.save()
 
                     # Create OffChainTransaction
-                    transaction = Transaction.objects.create(
-                        user=request.user,
-                        account=from_account,
+                    Transaction.objects.create(
                         from_address=from_account.address,
                         to_address=to_address,
                         amount=amount
@@ -82,9 +80,7 @@ class TransferView(View):
 
                             # Create Transaction
                             tx_info = web3.eth.getTransaction(tx_hash)
-                            tx = EthTransaction.objects.create(
-                                user=request.user,
-                                eth_account=admin_eth_account,
+                            EthTransaction.objects.create(
                                 tx_hash=tx_hash,
                                 from_address=admin_eth_account.address,
                                 to_address=to_address,
