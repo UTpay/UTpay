@@ -120,6 +120,39 @@
 }
 ```
 
+## UTpay アカウント取得
+認証されたユーザの UTpay アカウント情報を返します。
+
+**HTTP Headers**
+- Content-Type: application/json
+- Authorization: Bearer [token]
+
+**HTTP Request**
+
+**GET** /api/v1/accounts/
+
+**Response**
+```
+{
+    "count": 1,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "id": 1,
+            "user": {
+                "id": 1,
+                "username": "test",
+                "email": "test@example.com"
+            },
+            "address": "UT...",
+            "balance": "1000.000",
+            "qrcode": "http://127.0.0.1:8000/media/images/qrcode/account/UT....png"
+        }
+    ]
+}
+```
+
 ## Ethereum アカウント取得
 認証されたユーザの Ethereum アカウント情報を返します。
 
@@ -146,7 +179,7 @@
                 "email": "test@example.com"
             },
             "address": "0x...",
-            "qrcode": "http://127.0.0.1:8000/media/images/qrcode/0x....png"
+            "qrcode": "http://127.0.0.1:8000/media/images/qrcode/eth_account/0x....png"
         }
     ]
 }
@@ -214,20 +247,36 @@
     "results": [
         {
             "id": 1,
-            "user": {
-                "id": 1,
-                "username": "test",
-                "email": "test@example.com"
-            },
-            "eth_account": {
-                "id": 1,
-                "user": {
-                    "id": 1,
-                    "username": "test",
-                    "email": "test@example.com"
-                },
-                "address": "0x..."
-            },
+            "from_address": "UT...",
+            "to_address": "UT...",
+            "amount": "1.000",
+            "is_active": true,
+            "created_at": "2018/03/14 21:12:28"
+        }
+    ]
+}
+```
+
+## Ethereum トランザクション取得
+認証されたユーザに関する Ethereum トランザクション情報を返します。
+
+**HTTP Headers**
+- Content-Type: application/json
+- Authorization: Bearer [token]
+
+**HTTP Request**
+
+**GET** /api/v1/eth_transactions/
+
+**Response**
+```
+{
+    "count": 1,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "id": 1,
             "tx_hash": "0x...",
             "from_address": "0x...",
             "to_address": "0x...",
@@ -262,36 +311,13 @@
 ```
 {
     "success": true,
-    "address": "0x...",
-    "amount": 0.001,
-    "fee": 0.001,
     "transaction": {
-        "id": 2,
-        "user": {
-            "id": 1,
-            "username": "test",
-            "email": "test@example.com"
-        },
-        "eth_account": {
-            "id": 1,
-            "user": {
-                "id": 1,
-                "username": "test",
-                "email": "test@example.com"
-            },
-            "address": "0x..."
-        },
-        "tx_hash": "0x...",
-        "from_address": "0x...",
-        "to_address": "0x...",
-        "amount": 1,
-        "amount_fixed": 0.001,
-        "gas": 137467,
-        "gas_price": 10000000000,
-        "value": 0,
-        "network_id": 3,
+        "id": 1,
+        "from_address": "UT...",
+        "to_address": "UT...",
+        "amount": "1.000",
         "is_active": true,
-        "created_at": "2017/11/04 23:10:31"
+        "created_at": "2018/03/14 22:58:24"
     }
 }
 ```
@@ -316,8 +342,8 @@
     "results": [
         {
             "id": 1,
-            "address": "0x...",
-            "qrcode": "http://127.0.0.1:8000/media/images/qrcode/contract/0x....png",
+            "address": "UT...",
+            "qrcode": "http://127.0.0.1:8000/media/images/qrcode/contract/UT....png",
             "name": "Test Contract",
             "description": "This is a test contract.",
             "code": "pass",
@@ -347,8 +373,8 @@
 ```
 {
     "id": 1,
-    "address": "0x...",
-    "qrcode": "/media/images/qrcode/contract/0x....png",
+    "address": "UT...",
+    "qrcode": "/media/images/qrcode/contract/UT....png",
     "name": "Test Contract",
     "description": "This is a test contract.",
     "code": "pass",
