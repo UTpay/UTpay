@@ -7,12 +7,12 @@ django-debug-toolbar==1.9.1
 django-filter==1.1.0
 djangorestframework==3.7.7
 djangorestframework-jwt==1.11.0
-eth-abi==0.5.0
+eth-abi==1.0.0
 eth-hash==0.1.1
 eth-keyfile==0.5.1
-eth-keys==0.1.0b4
-eth-tester==0.1.0b11
-eth-utils==0.8.1
+eth-keys==0.2.0b3
+eth-tester==0.1.0b21
+eth-utils==1.0.1
 ethereum-keys==0.1.0a9
 ethereum-tester==0.1.0b3
 idna==2.6
