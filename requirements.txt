@@ -8,7 +8,7 @@ django-filter==1.1.0
 djangorestframework==3.7.7
 djangorestframework-jwt==1.11.0
 eth-abi==1.0.0
-eth-hash==0.1.1
+eth-hash==0.1.2
 eth-keyfile==0.5.1
 eth-keys==0.2.0b3
 eth-tester==0.1.0b21
