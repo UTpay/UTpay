@@ -23,7 +23,7 @@ olefile==0.45.1
 Pillow==5.1.0
 pycryptodome==3.6.1
 PyJWT==1.6.1
-pylru==1.0.9
+pylru==1.1.0
 pysha3==1.0.2
 pytz==2018.4
 qrcode==6.0
