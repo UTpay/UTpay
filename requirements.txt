@@ -22,7 +22,7 @@ mysqlclient==1.3.12
 olefile==0.45.1
 Pillow==5.1.0
 pycryptodome==3.6.1
-PyJWT==1.6.2
+PyJWT==1.6.3
 pylru==1.1.0
 pysha3==1.0.2
 pytz==2018.4
