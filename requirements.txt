@@ -27,7 +27,7 @@ pylru==1.1.0
 pysha3==1.0.2
 pytz==2018.4
 qrcode==6.0
-requests==2.19.0
+requests==2.19.1
 rlp==1.0.1
 semantic-version==2.6.0
 six==1.11.0
