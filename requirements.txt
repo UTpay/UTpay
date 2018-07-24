@@ -11,7 +11,7 @@ eth-abi==1.1.1
 eth-hash==0.1.4
 eth-keyfile==0.5.1
 eth-keys==0.2.0b3
-eth-tester==0.1.0b28
+eth-tester==0.1.0b29
 eth-utils==1.0.3
 ethereum-keys==0.1.0a9
 ethereum-tester==0.1.0b3
