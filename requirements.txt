@@ -12,7 +12,7 @@ eth-hash==0.1.4
 eth-keyfile==0.5.1
 eth-keys==0.2.0b3
 eth-tester==0.1.0b31
-eth-utils==1.0.3
+eth-utils==1.1.1
 ethereum-keys==0.1.0a9
 ethereum-tester==0.1.0b3
 idna==2.7
